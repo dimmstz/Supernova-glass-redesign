@@ -22,7 +22,7 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "com.supernova.launcher"
-    compileSdk = 37
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.supernova.launcher"

@@ -2,8 +2,8 @@
 
 #### Infinitely Customizable Android Homescreen
 
-[![Android CI](https://github.com/tanujnotes/Supernova/actions/workflows/android.yml/badge.svg)](https://github.com/tanujnotes/Supernova/actions/workflows/android.yml)
-[![Latest release](https://img.shields.io/github/v/release/tanujnotes/Supernova?display_name=tag)](https://github.com/tanujnotes/Supernova/releases)
+[![Android CI](https://github.com/dimmstz/Supernova-glass-redesign/actions/workflows/android.yml/badge.svg)](https://github.com/dimmstz/Supernova-glass-redesign/actions/workflows/android.yml)
+[![Latest release](https://img.shields.io/github/v/release/dimmstz/Supernova-glass-redesign?display_name=tag)](https://github.com/dimmstz/Supernova-glass-redesign/releases)
 
 Supernova is an open-source Android launcher focused on deep customization, gestures, widgets, feeds, icon packs and a fast, distraction-free home screen.
 
@@ -17,7 +17,7 @@ The current release line is `v0.1.9`. Release APKs are built and attached automa
 
 ## Build locally
 
-The project requires JDK 17 and Android SDK Platform 37. After installing those prerequisites, run:
+The project requires JDK 17 and Android SDK Platform 36. After installing those prerequisites, run:
 
 ```bash
 ./gradlew assembleDebug
