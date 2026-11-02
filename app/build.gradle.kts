@@ -28,8 +28,8 @@ android {
         applicationId = "com.supernova.launcher"
         minSdk = 28
         targetSdk = 36
-        versionCode = 11
-        versionName = "v0.1.11"
+        versionCode = 12
+        versionName = "v0.1.12"
     }
 
     signingConfigs {
@@ -58,6 +58,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("safe") {
+            dimension = "distribution"
         }
     }
 

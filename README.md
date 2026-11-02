@@ -13,7 +13,7 @@ Supernova is an open-source Android launcher focused on deep customization, gest
 - [Latest APK release](https://github.com/tanujnotes/Supernova/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.1.11`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
+The current release line is `v0.1.12`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
@@ -46,7 +46,7 @@ The workflow then performs the build and publishes the release automatically. It
 
 ## Design system update
 
-The current UI includes a performance-conscious Glassmorphism layer for Settings: deep dark surfaces, translucent cards, specular 1px rims, accent glows, shared radius/elevation tokens, focus/press states and a single Android 12+ window backdrop blur with a fallback for older devices. Business logic, launcher gestures, navigation contracts, DataStore persistence and widget behavior remain unchanged.
+The current UI includes a performance-conscious Glassmorphism layer for Settings: deep dark surfaces, translucent cards, specular 1px rims, accent glows, shared radius/elevation tokens, focus/press states and a single Android 12+ window backdrop blur with a fallback for older devices. Business logic, launcher gestures, navigation contracts, DataStore persistence and widget behavior remain unchanged. Public Releases use the Safe variant, which omits contacts, calendar, Bluetooth, notification-listener, accessibility and device-admin capabilities to reduce Play Protect warnings for sideloaded APKs.
 
 ## Follow
 

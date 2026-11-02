@@ -45,13 +45,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build debug APK
-        run: ./gradlew --no-daemon --stacktrace assembleDebug
+        run: ./gradlew --no-daemon --stacktrace assembleSafeDebug
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: supernova-debug-${{ github.sha }}
-          path: app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/safe/debug/*.apk
           if-no-files-found: error
           retention-days: 14
 
@@ -81,7 +81,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build release APK
-        run: ./gradlew --no-daemon --stacktrace assembleRelease
+        run: ./gradlew --no-daemon --stacktrace assembleSafeRelease
 
       - name: Sign release APK for CI distribution
         run: |
@@ -94,7 +94,7 @@ jobs:
             -storepass changeit \
             -keypass changeit \
             -dname "CN=Supernova CI, OU=Android, O=Supernova, C=US"
-          unsigned_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
+          unsigned_apk=$(find app/build/outputs/apk/safe/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
           test -n "$unsigned_apk"
           "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" sign \
             --ks ci-release.jks \
