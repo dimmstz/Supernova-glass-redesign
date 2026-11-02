@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="glassControlFill">#D01B2839</color>
+    <color name="glassNavFill">#D60A111C</color>
+    <color name="glassSurfaceOutline">#44FFFFFF</color>
+    <color name="glassSpecularStrong">#70FFFFFF</color>
+    <color name="glassSpecularSoft">#26FFFFFF</color>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Single-window blur and translucent glass surfaces. Keep blur bounded
+         to the Settings window; scrolling rows use cached paint primitives. -->
+    <color name="glassControlFill">#E0FFFFFF</color>
+    <color name="glassNavFill">#E0F7F9FC</color>
+    <color name="glassSurfaceOutline">#426C8299</color>
+    <color name="glassSpecularStrong">#8CFFFFFF</color>
+    <color name="glassSpecularSoft">#3DFFFFFF</color>
+
+    <dimen name="glass_window_blur_radius">28dp</dimen>
+    <dimen name="glass_stroke_width">1dp</dimen>
+    <dimen name="glass_pill_radius">24dp</dimen>
+    <dimen name="glass_control_radius">20dp</dimen>
+    <dimen name="glass_input_radius">14dp</dimen>
+    <dimen name="glass_card_radius">22dp</dimen>
+    <dimen name="glass_preview_radius">20dp</dimen>
+    <dimen name="glass_dialog_radius">28dp</dimen>
+    <dimen name="glass_sheet_radius">28dp</dimen>
+    <dimen name="glass_elevation_1">3dp</dimen>
+    <dimen name="glass_elevation_2">8dp</dimen>
+    <dimen name="glass_elevation_3">16dp</dimen>
+
+    <!-- ARGB alpha in [0, 255]. Opacity is reduced only when the platform
+         compositor can blur behind this translucent window. -->
+    <integer name="glass_backdrop_alpha">232</integer>
+    <integer name="glass_card_alpha">228</integer>
+    <integer name="glass_accent_glow_alpha">24</integer>
+</resources>

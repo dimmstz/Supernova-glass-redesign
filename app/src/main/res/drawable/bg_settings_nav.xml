@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The footer's glass plate. SettingsActivity replaces the fill with the
+     accent-aware cached drawable; this XML keeps previews and fallback paths aligned. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/glassNavFill" />
+            <stroke
+                android:width="@dimen/glass_stroke_width"
+                android:color="@color/glassSurfaceOutline" />
+        </shape>
+    </item>
+    <item
+        android:height="1dp"
+        android:gravity="top">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/glassSpecularStrong" />
+        </shape>
+    </item>
+</layer-list>

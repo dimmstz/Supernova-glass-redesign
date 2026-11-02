@@ -1,0 +1,21 @@
+*.iml
+.gradle/
+.kotlin/
+/local.properties
+/.idea/
+.DS_Store
+build/
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+output-metadata.json
+/app/release
+# Release signing (see app/build.gradle.kts)
+keystore.properties
+*.jks
+*.keystore
+# Everything kept out of the public repo: signing keys, release notes,
+# release APKs, marketing images.
+/local/

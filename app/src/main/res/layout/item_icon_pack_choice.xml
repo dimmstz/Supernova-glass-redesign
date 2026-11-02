@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One row of the icon pack sheet: the pack's name over a strip of its own
+     icons, so the choice is made by looking at the icons rather than by
+     recognising a pack's name; the current pack's tick sits in the 48dp
+     control column, 20dp in from the sheet's edge. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="64dp"
+    android:orientation="horizontal"
+    android:paddingVertical="10dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="20dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/packLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp" />
+
+        <!-- GONE until the previews load, and for the system-default row,
+             which has no pack to sample. -->
+        <LinearLayout
+            android:id="@+id/packPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/packSelected"
+        android:layout_width="48dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:importantForAccessibility="no"
+        android:paddingHorizontal="13dp"
+        android:src="@drawable/ic_check"
+        app:tint="?attr/colorAccent" />
+</LinearLayout>
