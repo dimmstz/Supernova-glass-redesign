@@ -96,14 +96,14 @@ jobs:
             -dname "CN=Supernova CI, OU=Android, O=Supernova, C=US"
           unsigned_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
           test -n "$unsigned_apk"
-          apksigner sign \
+          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" sign \
             --ks ci-release.jks \
             --ks-key-alias supernova-ci \
             --ks-pass pass:changeit \
             --key-pass pass:changeit \
             --out "Supernova-${GITHUB_REF_NAME}.apk" \
             "$unsigned_apk"
-          apksigner verify --verbose "Supernova-${GITHUB_REF_NAME}.apk"
+          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "Supernova-${GITHUB_REF_NAME}.apk"
 
       - name: Rename APK
         run: test -s "Supernova-${GITHUB_REF_NAME}.apk"

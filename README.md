@@ -13,7 +13,7 @@ Supernova is an open-source Android launcher focused on deep customization, gest
 - [Latest APK release](https://github.com/tanujnotes/Supernova/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.1.10`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
+The current release line is `v0.1.11`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
