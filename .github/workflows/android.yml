@@ -83,8 +83,30 @@ jobs:
       - name: Build release APK
         run: ./gradlew --no-daemon --stacktrace assembleRelease
 
+      - name: Sign release APK for CI distribution
+        run: |
+          keytool -genkeypair -v \
+            -keystore ci-release.jks \
+            -alias supernova-ci \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 36500 \
+            -storepass changeit \
+            -keypass changeit \
+            -dname "CN=Supernova CI, OU=Android, O=Supernova, C=US"
+          unsigned_apk=$(find app/build/outputs/apk/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
+          test -n "$unsigned_apk"
+          apksigner sign \
+            --ks ci-release.jks \
+            --ks-key-alias supernova-ci \
+            --ks-pass pass:changeit \
+            --key-pass pass:changeit \
+            --out "Supernova-${GITHUB_REF_NAME}.apk" \
+            "$unsigned_apk"
+          apksigner verify --verbose "Supernova-${GITHUB_REF_NAME}.apk"
+
       - name: Rename APK
-        run: cp app/build/outputs/apk/release/*.apk "Supernova-${GITHUB_REF_NAME}.apk"
+        run: test -s "Supernova-${GITHUB_REF_NAME}.apk"
 
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4

@@ -13,7 +13,7 @@ Supernova is an open-source Android launcher focused on deep customization, gest
 - [Latest APK release](https://github.com/tanujnotes/Supernova/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.1.9`. Release APKs are built and attached automatically by GitHub Actions from version tags.
+The current release line is `v0.1.10`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
@@ -29,7 +29,7 @@ The debug APK is written to `app/build/outputs/apk/debug/`. For a release build,
 ./gradlew assembleRelease
 ```
 
-Release signing is intentionally kept outside the repository. Provide the existing `keystore.properties` configuration locally when a signed APK is required; otherwise Gradle produces an unsigned release APK suitable for CI artifact validation.
+Release builds use the existing `keystore.properties` configuration locally when a production signing key is available. GitHub Actions also signs the distributed CI APK with a temporary CI key and runs `apksigner verify` before publishing, so the Release asset is a valid installable APK. A production key should be configured as repository Actions secrets before distributing update-compatible builds.
 
 ## Continuous integration and releases
 
