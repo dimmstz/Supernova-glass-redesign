@@ -19,12 +19,12 @@
                     android:translateX="27"
                     android:translateY="27">
                     <path
-                        android:fillColor="#3F72AF"
+                        android:fillColor="#4F7CFF"
                         android:pathData="M3,4h18v3h-18z M5,10h14v2h-14z M5,14h9v2h-9z" />
                     <group>
                         <clip-path android:pathData="M0,0H24V12H0Z" />
                         <path
-                            android:fillColor="#D4574B"
+                            android:fillColor="#9B6BFF"
                             android:pathData="M3,4h18v3h-18z M5,10h14v2h-14z M5,14h9v2h-9z" />
                     </group>
                 </group>

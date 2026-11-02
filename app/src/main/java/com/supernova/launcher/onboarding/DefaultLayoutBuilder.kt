@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Telephony
-import com.supernova.launcher.SettingsActivity
 import com.supernova.launcher.data.AppCatalog
 import com.supernova.launcher.data.ContainerType
 import com.supernova.launcher.data.DeviceProfile
@@ -20,7 +19,7 @@ import java.util.UUID
 // (default_workspace layouts, in Launcher3's layout format). On a phone:
 // phone, messages, maps, browser and camera in the dock, and on the first page
 // the email app, the gallery and the app store along the bottom row with
-// Supernova Settings in the top-right corner (default_workspace_5x5). On a
+// Lumi Lite Settings in the top-right corner (default_workspace_5x5). On a
 // tablet, which has no phone: email, calendar, gallery, app store, browser
 // and camera in the dock and nothing on the page (default_workspace_6x5).
 // Each place tries its sources in order and takes the first that resolves to
@@ -47,7 +46,7 @@ object DefaultLayoutBuilder {
         // The default SMS app, Android's SMS role.
         data object DefaultSms : Source
 
-        // Supernova Settings' drawer entry. Supernova has a second one, the
+        // Lumi Lite Settings' drawer entry. Lumi Lite no longer has a second one, the
         // launcher itself, so it is asked for by name.
         data object Self : Source
 
@@ -101,7 +100,6 @@ object DefaultLayoutBuilder {
         listOf(EMAIL, CALENDAR, GALLERY, MARKET, BROWSER, CAMERA).map { Slot(null, it) }
     } else {
         listOf(DIALER, MESSAGES, MAPS, BROWSER, CAMERA).map { Slot(null, it) } + listOf(
-            Slot(-1 to 0, listOf(Source.Self)),
             Slot(0 to -1, EMAIL),
             Slot(1 to -1, GALLERY),
             Slot(-1 to -1, MARKET)
@@ -113,18 +111,10 @@ object DefaultLayoutBuilder {
         val apps = HashMap<String, LaunchableApp?>()
         fun launchable(pkg: String?): String? =
             pkg?.takeIf { apps.getOrPut(it) { catalog.mainActivityFor(it, userSerial = 0L) } != null }
-        // The alias is named against the app's namespace, SettingsActivity's
-        // package. Not R's: R8 renames R in release builds (to something like
-        // "tz0"), while a class the manifest names keeps its name.
-        val settingsAlias = SettingsActivity::class.java.name.substringBeforeLast('.') + ".SettingsLauncherAlias"
         fun resolve(source: Source): String? = launchable(
             when (source) {
                 Source.DefaultSms -> runCatching { Telephony.Sms.getDefaultSmsPackage(context) }.getOrNull()
-                Source.Self -> catalog.mainActivityFor(context.packageName, userSerial = 0L, className = settingsAlias)
-                    ?.let { settings ->
-                        apps[settings.packageName] = settings
-                        settings.packageName
-                    }
+                Source.Self -> null
                 is Source.Category -> resolvePackage(pm, Intent(Intent.ACTION_MAIN).addCategory(source.category))
                 is Source.Action -> resolvePackage(
                     pm,

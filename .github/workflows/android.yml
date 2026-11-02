@@ -101,18 +101,18 @@ jobs:
             --ks-key-alias supernova-ci \
             --ks-pass pass:changeit \
             --key-pass pass:changeit \
-            --out "LumiLauncherLite-${GITHUB_REF_NAME}.apk" \
+            --out "LumiLite-${GITHUB_REF_NAME}.apk" \
             "$unsigned_apk"
-          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "LumiLauncherLite-${GITHUB_REF_NAME}.apk"
+          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "LumiLite-${GITHUB_REF_NAME}.apk"
 
       - name: Rename APK
-        run: test -s "LumiLauncherLite-${GITHUB_REF_NAME}.apk"
+        run: test -s "LumiLite-${GITHUB_REF_NAME}.apk"
 
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: supernova-${{ github.ref_name }}
-          path: LumiLauncherLite-${{ github.ref_name }}.apk
+          path: LumiLite-${{ github.ref_name }}.apk
           if-no-files-found: error
           retention-days: 90
 
@@ -121,4 +121,4 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
-          files: LumiLauncherLite-${{ github.ref_name }}.apk
+          files: LumiLite-${{ github.ref_name }}.apk

@@ -1,11 +1,11 @@
-# Lumi Launcher Lite
+# Lumi Lite
 
 #### Infinitely Customizable Android Homescreen
 
 [![Android CI](https://github.com/dimmstz/Supernova-glass-redesign/actions/workflows/android.yml/badge.svg)](https://github.com/dimmstz/Supernova-glass-redesign/actions/workflows/android.yml)
 [![Latest release](https://img.shields.io/github/v/release/dimmstz/Supernova-glass-redesign?display_name=tag)](https://github.com/dimmstz/Supernova-glass-redesign/releases)
 
-Lumi Launcher Lite is an open-source Android launcher focused on deep customization, gestures, widgets, feeds, icon packs and a fast, distraction-free home screen.
+Lumi Lite is an open-source Android launcher focused on deep customization, gestures, widgets, feeds, icon packs and a fast, distraction-free home screen.
 
 ## Install
 
@@ -13,7 +13,7 @@ Lumi Launcher Lite is an open-source Android launcher focused on deep customizat
 - [Latest APK release](https://github.com/dimmstz/Supernova-glass-redesign/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.2.0`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
+The current release line is `v0.3.0`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
@@ -50,8 +50,8 @@ The current UI includes a performance-conscious Glassmorphism layer for Settings
 
 ## Follow
 
-- X/Twitter [@SupernovaLaunch](https://x.com/supernovalaunch)
-- Reddit [r/SupernovaLauncher](https://www.reddit.com/r/SupernovaLauncher)
+- X/Twitter [@LumiLiteLauncher](https://x.com/supernovalaunch)
+- Reddit [r/LumiLiteLauncher](https://www.reddit.com/r/LumiLiteLauncher)
 
 ## License
 

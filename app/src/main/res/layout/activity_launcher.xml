@@ -195,6 +195,17 @@
                         android:textSize="16sp" />
                 </FrameLayout>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/drawerSettingsButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lumi_settings_shortcut"
+                android:padding="10dp"
+                android:src="@drawable/ic_tab_settings"
+                android:tint="@color/lumiAccentBlue" />
         </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout

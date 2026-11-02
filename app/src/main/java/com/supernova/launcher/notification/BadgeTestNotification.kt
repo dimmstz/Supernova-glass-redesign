@@ -10,8 +10,8 @@ import com.supernova.launcher.R
 import com.supernova.launcher.SettingsActivity
 import com.supernova.launcher.ui.BadgeLook
 
-// "Test notification badge": one notification from Supernova itself,
-// so a badge turns up on the Supernova Settings icon in the drawer. It
+// "Test notification badge": one notification from Lumi Lite itself,
+// so a badge turns up on the Lumi Lite Settings icon in the drawer. It
 // carries a picture, which is what a Dynamic badge shows.
 object BadgeTestNotification {
 

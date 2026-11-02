@@ -1213,6 +1213,10 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
 
     private fun setupDrawer() {
         cardActivation = com.supernova.launcher.feed.CardActivation(this) { viewModel.feedCards() }
+        binding.drawerSettingsButton.setOnClickListener {
+            hideDrawer()
+            startActivity(android.content.Intent(this, SettingsActivity::class.java))
+        }
         drawer = DrawerController(
             binding = binding,
             viewModel = viewModel,

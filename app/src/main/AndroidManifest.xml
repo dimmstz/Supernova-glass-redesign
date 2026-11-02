@@ -15,7 +15,7 @@
          silently unless the caller holds this (install-time) permission. -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <!-- Only for Settings > Icons & labels > Test notification badge, which
-         posts one notification from Supernova itself; asked for from that
+         posts one notification from Lumi Lite itself; asked for from that
          row. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Feed page (Phase 7). All runtime-gated and requested contextually
@@ -98,21 +98,6 @@
             android:label="@string/settings_launcher_label"
             android:launchMode="singleTask"
             android:taskAffinity="${applicationId}.settings" />
-
-        <!-- Puts a "Supernova Settings" entry in every launcher's drawer;
-             hideable via Hide apps. The target
-             activity stays non-exported - the alias carries its own export. -->
-        <activity-alias
-            android:name=".SettingsLauncherAlias"
-            android:targetActivity=".SettingsActivity"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_settings"
-            android:label="@string/settings_launcher_label">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
 
         <!-- First-run wizard. Mirrors SettingsActivity's declaration, plus:
              excluded from recents (it's a transient overlay on the launcher),

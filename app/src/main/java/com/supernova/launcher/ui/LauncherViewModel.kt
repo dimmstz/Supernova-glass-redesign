@@ -1584,7 +1584,7 @@ class LauncherViewModel(
     // The home screen a fresh install starts with (see
     // DefaultLayoutBuilder): on a phone, the device's phone, messages, maps,
     // browser and camera apps in the dock with the search bar under them,
-    // and a few apps and Supernova Settings on the first page; on a tablet,
+    // and a few apps and Lumi Lite Settings on the first page; on a tablet,
     // the default tablet dock. The first-run wizard plants it as it opens. Planted once per install, and only over a layout that
     // is still empty: an import brought its own arrangement. The drawer's
     // first smart folders come with it, the small ones only.
