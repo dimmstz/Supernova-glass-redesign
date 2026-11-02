@@ -93,7 +93,7 @@ jobs:
             -validity 36500 \
             -storepass changeit \
             -keypass changeit \
-            -dname "CN=Supernova CI, OU=Android, O=Supernova, C=US"
+            -dname "CN=Lumi Launcher Lite CI, OU=Android, O=Lumi Launcher Lite, C=US"
           unsigned_apk=$(find app/build/outputs/apk/safe/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
           test -n "$unsigned_apk"
           "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" sign \
@@ -101,18 +101,18 @@ jobs:
             --ks-key-alias supernova-ci \
             --ks-pass pass:changeit \
             --key-pass pass:changeit \
-            --out "Supernova-${GITHUB_REF_NAME}.apk" \
+            --out "LumiLauncherLite-${GITHUB_REF_NAME}.apk" \
             "$unsigned_apk"
-          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "Supernova-${GITHUB_REF_NAME}.apk"
+          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "LumiLauncherLite-${GITHUB_REF_NAME}.apk"
 
       - name: Rename APK
-        run: test -s "Supernova-${GITHUB_REF_NAME}.apk"
+        run: test -s "LumiLauncherLite-${GITHUB_REF_NAME}.apk"
 
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: supernova-${{ github.ref_name }}
-          path: Supernova-${{ github.ref_name }}.apk
+          path: LumiLauncherLite-${{ github.ref_name }}.apk
           if-no-files-found: error
           retention-days: 90
 
@@ -121,4 +121,4 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
-          files: Supernova-${{ github.ref_name }}.apk
+          files: LumiLauncherLite-${{ github.ref_name }}.apk

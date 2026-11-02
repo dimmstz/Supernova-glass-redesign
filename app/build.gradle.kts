@@ -25,11 +25,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.supernova.launcher"
+        applicationId = "com.dimm.lumilite"
         minSdk = 28
         targetSdk = 36
-        versionCode = 12
-        versionName = "v0.1.12"
+        versionCode = 13
+        versionName = "v0.2.0"
     }
 
     signingConfigs {

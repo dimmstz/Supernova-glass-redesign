@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Supernova</string>
+    <string name="app_name">Lumi Launcher Lite</string>
     <!-- The name the system shows (drawers, the default-home chooser, the
          accessibility and notification-access lists); debug builds rename it. -->
-    <string name="app_label">Supernova</string>
+    <string name="app_label">Lumi Launcher Lite</string>
     <string name="settings">Settings</string>
     <string name="set_default_launcher">Set as default launcher</string>
     <string name="add_page">Add page</string>
@@ -90,8 +90,8 @@
         <item quantity="other">%d folders</item>
     </plurals>
     <string name="gestures">Gestures</string>
-    <string name="accessibility_description">Lets Supernova lock the screen from a gesture. Optional; no screen content is read.</string>
-    <string name="lock_needs_accessibility">Enable Supernova in Accessibility settings to lock the screen</string>
+    <string name="accessibility_description">Lets Lumi Launcher Lite lock the screen from a gesture. Optional; no screen content is read.</string>
+    <string name="lock_needs_accessibility">Enable Lumi Launcher Lite in Accessibility settings to lock the screen</string>
     <string name="hidden_apps">Hidden apps</string>
     <string name="drawer_groups">Drawer groups</string>
     <string name="drawer_style">Drawer style</string>
@@ -209,11 +209,11 @@
     <string name="badge_position">Badge position</string>
     <string name="badge_size">Badge size</string>
     <string name="badge_test">Test notification badge</string>
-    <string name="badge_test_summary">Post a notification that will create a badge on the Supernova Settings icon</string>
+    <string name="badge_test_summary">Post a notification that will create a badge on the Lumi Launcher Lite Settings icon</string>
     <string name="badge_test_channel">Test notifications</string>
     <string name="badge_test_title">Test notification</string>
-    <string name="badge_test_text">Supernova Settings has a badge now. Tap to clear it.</string>
-    <string name="badge_test_blocked">Supernova isn\'t allowed to post notifications</string>
+    <string name="badge_test_text">Lumi Launcher Lite Settings has a badge now. Tap to clear it.</string>
+    <string name="badge_test_blocked">Lumi Launcher Lite isn\'t allowed to post notifications</string>
     <string name="badge_test_badges_off">Posted. Turn on Notification badges to see the badge.</string>
     <string name="shortcut_unusable">That shortcut couldn\'t be used</string>
     <string name="pos_top_right">Top right</string>
@@ -303,7 +303,7 @@
     <string name="action_assistant">Assistant</string>
     <string name="action_launch_app">Launch app</string>
     <string name="action_launch_shortcut">Launch shortcut</string>
-    <string name="action_needs_accessibility">Enable Supernova in Accessibility settings for this action</string>
+    <string name="action_needs_accessibility">Enable Lumi Launcher Lite in Accessibility settings for this action</string>
     <string name="assistant_unavailable">No assistant app available</string>
     <string name="pick_shortcut">Choose a shortcut</string>
     <string name="no_shortcuts">This app has no shortcuts</string>
@@ -400,7 +400,7 @@
     <string name="about_license">Open-source license</string>
     <string name="about_license_name">AGPL-3.0</string>
     <string name="about_source">Source code</string>
-    <string name="about_source_url" translatable="false">https://github.com/tanujnotes/Supernova</string>
+    <string name="about_source_url" translatable="false">https://github.com/dimmstz/Supernova-glass-redesign</string>
     <string name="crash_log">Crash log</string>
     <string name="crash_log_none">No crashes recorded</string>
     <plurals name="crash_log_count">
@@ -415,9 +415,9 @@
     <!-- Short, so the dialog's three buttons fit on one row. -->
     <string name="crash_log_share_button">Share</string>
     <string name="crash_log_clear">Clear</string>
-    <string name="crash_log_subject">Supernova crash log</string>
+    <string name="crash_log_subject">Lumi Launcher Lite crash log</string>
     <string name="crash_log_share_failed">Couldn\'t share the crash log: %1$s</string>
-    <string name="about_license_text">Supernova is free software, released under the GNU Affero General Public License v3.0. You may redistribute and modify it under the terms of that license; it comes with no warranty. The full text ships in the LICENSE file of the source repository.</string>
+    <string name="about_license_text">Lumi Launcher Lite is free software, released under the GNU Affero General Public License v3.0. You may redistribute and modify it under the terms of that license; it comes with no warranty. The full text ships in the LICENSE file of the source repository.</string>
     <string name="section_home_subtitle">Grid, icons, labels and pages</string>
     <string name="section_dock_subtitle">Icons, background and pages</string>
     <string name="section_drawer_subtitle">Layout, style and tabs</string>
@@ -544,7 +544,7 @@
     <!-- Group labels on the grouped settings pages (the root list and Style). -->
     <string name="settings_group_screens">Screens</string>
     <string name="settings_group_customize">Customize</string>
-    <string name="settings_group_app">Supernova</string>
+    <string name="settings_group_app">Lumi Launcher Lite</string>
     <string name="style_group_theme">Theme</string>
     <string name="style_group_surfaces">Surfaces</string>
     <string name="style_tab">Style</string>
@@ -579,7 +579,7 @@
     <string name="export_png">Export PNG</string>
     <string name="export_png_saved">PNG saved</string>
     <string name="export_png_failed">Couldn\'t save the PNG: %1$s</string>
-    <string name="export_png_lost">Couldn\'t save the PNG: Supernova restarted while the file picker was open</string>
+    <string name="export_png_lost">Couldn\'t save the PNG: Lumi Launcher Lite restarted while the file picker was open</string>
     <string name="labs_export_icons">Export icons</string>
     <string name="labs_export_icons_summary">Save every app\'s own icon to a zip, with an appfilter.xml of their component names to start an icon pack from</string>
     <string name="labs_export_icons_failed">Couldn\'t export icons: %1$s</string>
@@ -681,7 +681,7 @@
     <string name="action_desktop_previews">Desktop previews</string>
     <string name="action_open_feed">Feed page</string>
     <string name="action_voice_search">Voice search</string>
-    <string name="settings_launcher_label">Supernova Settings</string>
+    <string name="settings_launcher_label">Lumi Launcher Lite Settings</string>
     <string name="lock_method">Screen lock method</string>
     <string name="lock_method_accessibility">Accessibility service</string>
     <string name="lock_method_device_admin">Device admin</string>

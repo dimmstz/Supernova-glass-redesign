@@ -1,32 +1,32 @@
-# Supernova Launcher
+# Lumi Launcher Lite
 
 #### Infinitely Customizable Android Homescreen
 
 [![Android CI](https://github.com/dimmstz/Supernova-glass-redesign/actions/workflows/android.yml/badge.svg)](https://github.com/dimmstz/Supernova-glass-redesign/actions/workflows/android.yml)
 [![Latest release](https://img.shields.io/github/v/release/dimmstz/Supernova-glass-redesign?display_name=tag)](https://github.com/dimmstz/Supernova-glass-redesign/releases)
 
-Supernova is an open-source Android launcher focused on deep customization, gestures, widgets, feeds, icon packs and a fast, distraction-free home screen.
+Lumi Launcher Lite is an open-source Android launcher focused on deep customization, gestures, widgets, feeds, icon packs and a fast, distraction-free home screen.
 
 ## Install
 
-- [F-Droid](https://f-droid.org/packages/com.supernova.launcher)
-- [Latest APK release](https://github.com/tanujnotes/Supernova/releases/latest)
+- [F-Droid](https://f-droid.org/packages/com.dimm.lumilite)
+- [Latest APK release](https://github.com/dimmstz/Supernova-glass-redesign/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.1.12`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
+The current release line is `v0.2.0`. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
 The project requires JDK 17 and Android SDK Platform 36. After installing those prerequisites, run:
 
 ```bash
-./gradlew assembleDebug
+./gradlew assembleSafeDebug
 ```
 
 The debug APK is written to `app/build/outputs/apk/debug/`. For a release build, run:
 
 ```bash
-./gradlew assembleRelease
+./gradlew assembleSafeRelease
 ```
 
 Release builds use the existing `keystore.properties` configuration locally when a production signing key is available. GitHub Actions also signs the distributed CI APK with a temporary CI key and runs `apksigner verify` before publishing, so the Release asset is a valid installable APK. A production key should be configured as repository Actions secrets before distributing update-compatible builds.
