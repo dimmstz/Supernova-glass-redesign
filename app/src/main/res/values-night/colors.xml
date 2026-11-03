@@ -1,14 +1,14 @@
 <resources>
     <!-- The original dark palette. -->
-    <color name="background">#0D1117</color>
-    <color name="surface">#1A2230</color>
-    <color name="drawerBackground">#1E2735</color>
-    <color name="textPrimary">#FFFFFF</color>
-    <color name="textSecondary">#B3FFFFFF</color>
-    <color name="raised">#263142</color>
-    <color name="accentBlueText">#82B8FF</color>
-    <color name="accentIndigoText">#9DA6D9</color>
-    <color name="accentPurpleText">#BB7CCC</color>
+    <color name="background">#080D18</color>
+    <color name="surface">#141F31</color>
+    <color name="drawerBackground">#17243A</color>
+    <color name="textPrimary">#F7FAFF</color>
+    <color name="textSecondary">#B9C7DB</color>
+    <color name="raised">#20314A</color>
+    <color name="accentBlueText">#78A8FF</color>
+    <color name="accentIndigoText">#A5B3FF</color>
+    <color name="accentPurpleText">#C29BFF</color>
     <color name="accentPinkText">#F48CAF</color>
     <color name="accentRedText">#EF8886</color>
     <color name="accentOrangeText">#FDBA66</color>
@@ -17,14 +17,14 @@
     <color name="accentTealText">#66B8B0</color>
     <color name="accentCyanText">#66CDDA</color>
     <color name="rippleHighlight">#1AFFFFFF</color>
-    <color name="settingsNav">#131923</color>
-    <color name="settingsPillBg">#1AFFFFFF</color>
+    <color name="settingsNav">#0D1728</color>
+    <color name="settingsPillBg">#2AFFFFFF</color>
     <!-- Hairlines on the settings cards: row dividers, tile outlines. -->
-    <color name="settingsDivider">#14FFFFFF</color>
-    <color name="settingsBox">#8CFFFFFF</color>
-    <color name="settingsStepBg">#1AFFFFFF</color>
-    <color name="settingsPickerTile">#0FFFFFFF</color>
-    <color name="settingsBand">#161D29</color>
+    <color name="settingsDivider">#24FFFFFF</color>
+    <color name="settingsBox">#A8C5E8FF</color>
+    <color name="settingsStepBg">#20FFFFFF</color>
+    <color name="settingsPickerTile">#18283F</color>
+    <color name="settingsBand">#101C30</color>
     <color name="settingsWarn">#FFB077</color>
     <color name="settingsWarnTile">#29FFB077</color>
     <color name="settingsOk">#5FD3A6</color>
