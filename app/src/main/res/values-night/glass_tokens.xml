@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="glassControlFill">#D9223048</color>
-    <color name="glassNavFill">#E00B1629</color>
-    <color name="glassSurfaceOutline">#668CA6C9</color>
-    <color name="glassSpecularStrong">#A8FFFFFF</color>
-    <color name="glassSpecularSoft">#3DFFFFFF</color>
+    <color name="glassControlFill">#D91A1D20</color>
+    <color name="glassNavFill">#E00D1012</color>
+    <color name="glassSurfaceOutline">#586B737A</color>
+    <color name="glassSpecularStrong">#B8FFFFFF</color>
+    <color name="glassSpecularSoft">#36FFFFFF</color>
 
     <!-- A single bounded window blur is used by SettingsActivity on Android
          12+. Cards themselves remain cached Canvas primitives. -->

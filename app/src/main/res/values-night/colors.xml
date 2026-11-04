@@ -1,14 +1,15 @@
 <resources>
-    <!-- The original dark palette. -->
-    <color name="background">#080D18</color>
-    <color name="surface">#141F31</color>
-    <color name="drawerBackground">#17243A</color>
-    <color name="textPrimary">#F7FAFF</color>
-    <color name="textSecondary">#B9C7DB</color>
-    <color name="raised">#20314A</color>
-    <color name="accentBlueText">#78A8FF</color>
-    <color name="accentIndigoText">#A5B3FF</color>
-    <color name="accentPurpleText">#C29BFF</color>
+    <!-- Lumi Lite dark reference: graphite surfaces, neutral highlights. -->
+    <color name="background">#0B0D0F</color>
+    <color name="surface">#15181B</color>
+    <color name="drawerBackground">#171A1D</color>
+    <color name="textPrimary">#F4F5F6</color>
+    <color name="textSecondary">#B8BCC1</color>
+    <color name="raised">#22262A</color>
+    <color name="settingsAccent">#D7DBE0</color>
+    <color name="accentBlueText">#D7DBE0</color>
+    <color name="accentIndigoText">#D7DBE0</color>
+    <color name="accentPurpleText">#D7DBE0</color>
     <color name="accentPinkText">#F48CAF</color>
     <color name="accentRedText">#EF8886</color>
     <color name="accentOrangeText">#FDBA66</color>
@@ -16,15 +17,15 @@
     <color name="accentGreenText">#8EC691</color>
     <color name="accentTealText">#66B8B0</color>
     <color name="accentCyanText">#66CDDA</color>
-    <color name="rippleHighlight">#1AFFFFFF</color>
-    <color name="settingsNav">#0D1728</color>
-    <color name="settingsPillBg">#2AFFFFFF</color>
+    <color name="rippleHighlight">#20FFFFFF</color>
+    <color name="settingsNav">#0E1113</color>
+    <color name="settingsPillBg">#24FFFFFF</color>
     <!-- Hairlines on the settings cards: row dividers, tile outlines. -->
-    <color name="settingsDivider">#24FFFFFF</color>
-    <color name="settingsBox">#A8C5E8FF</color>
-    <color name="settingsStepBg">#20FFFFFF</color>
-    <color name="settingsPickerTile">#18283F</color>
-    <color name="settingsBand">#101C30</color>
+    <color name="settingsDivider">#20FFFFFF</color>
+    <color name="settingsBox">#40505A64</color>
+    <color name="settingsStepBg">#1AFFFFFF</color>
+    <color name="settingsPickerTile">#24282C</color>
+    <color name="settingsBand">#111416</color>
     <color name="settingsWarn">#FFB077</color>
     <color name="settingsWarnTile">#29FFB077</color>
     <color name="settingsOk">#5FD3A6</color>

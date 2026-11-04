@@ -37,6 +37,7 @@
     <color name="accentGreenText">@color/accentGreen</color>
     <color name="accentTealText">@color/accentTeal</color>
     <color name="accentCyanText">@color/accentCyan</color>
+    <color name="settingsAccent">#66707A</color>
     <color name="lumiAccentBlue">#4F7CFF</color>
     <color name="lumiAccentPurple">#9B6BFF</color>
     <!-- The press ripple: black at 10% here, white at 10% at night. -->

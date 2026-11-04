@@ -374,6 +374,15 @@ class SettingsAdapter(private val previews: PreviewController) : RecyclerView.Ad
     ) : RecyclerView.ViewHolder(binding.root) {
         // The layout's accent tint, which a warning's amber replaces.
         private val accentTint = binding.groupRowIcon.imageTintList
+        private val nightTint = if (
+            (binding.root.resources.configuration.uiMode and
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
+        ) {
+            ColorStateList.valueOf(binding.root.context.getColor(R.color.settingsAccent))
+        } else {
+            accentTint
+        }
 
         fun bind(item: SettingItem.Row, prefs: LauncherPrefs, tiled: Boolean) {
             if (item.titleText != null) {
@@ -405,7 +414,7 @@ class SettingsAdapter(private val previews: PreviewController) : RecyclerView.Ad
                 if (look.warn) R.drawable.bg_settings_tile_warn else R.drawable.bg_settings_tile
             )
             binding.groupRowIcon.imageTintList =
-                if (look.warn) ColorStateList.valueOf(context.getColor(R.color.settingsWarn)) else accentTint
+                if (look.warn) ColorStateList.valueOf(context.getColor(R.color.settingsWarn)) else nightTint
         }
 
         // The value on the right, with its swatch, or under the title when

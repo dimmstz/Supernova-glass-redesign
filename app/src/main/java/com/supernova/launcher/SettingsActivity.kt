@@ -684,7 +684,11 @@ class SettingsActivity : AppCompatActivity() {
     private fun applySettingsSurface(prefs: LauncherPrefs) {
         val resolved = Styles.resolve(this, prefs).of(SurfaceId.SETTINGS)
         val surface = resolved.surface
-        val accent = resolved.accent
+        val accent = if (ThemeEngine.isNight(this, prefs)) {
+            getColor(R.color.settingsAccent)
+        } else {
+            resolved.accent
+        }
         if (surface != appliedGlassSurfaceColor || accent != appliedGlassAccentColor) {
             val opacity = if (glassWindowBlurEnabled) {
                 minOf(Color.alpha(surface), resources.getInteger(R.integer.glass_backdrop_alpha))
