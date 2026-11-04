@@ -115,11 +115,11 @@ data class LauncherModel(
 
 @Serializable
 data class LauncherPrefs(
-    // Phone grid, 5 columns by 6 rows (see DeviceProfile).
+    // Phone grid, 4 columns by 6 rows (see DeviceProfile).
     val gridRows: Int = 6,
-    val gridCols: Int = 5,
+    val gridCols: Int = 4,
     val dockCount: Int = 5,
-    val iconScale: Float = 1f,
+    val iconScale: Float = 1.5f,
     val showLabels: Boolean = true,
     val wallpaperScroll: Boolean = true,
     // WallpaperScrollMode name adding REVERSE; "" derives from the legacy
@@ -127,7 +127,7 @@ data class LauncherPrefs(
     // meaning without a migration.
     val wallpaperScrollMode: String = "",
     val iconPack: String = "",
-    val scrollEffect: String = "NONE",
+    val scrollEffect: String = "ZOOM_FADE",
     val iconShape: String = "SYSTEM",
     // JSON CustomShapeSpec backing IconShape.CUSTOM; "" = default 25% ROUND.
     val iconShapeCustom: String = "",
@@ -155,8 +155,8 @@ data class LauncherPrefs(
     val removeEmptyPages: Boolean = true,
     // Workspace page padding in dp per axis. None across: the
     // columns span the whole width, 216px apiece on a 1080px phone.
-    val desktopPaddingH: Int = 0,
-    val desktopPaddingV: Int = 12,
+    val desktopPaddingH: Int = 10,
+    val desktopPaddingV: Int = 10,
     val desktopLocked: Boolean = false,
     val dockEnabled: Boolean = true,
     // Dock rank space is page * dockCount + slot; extra pages swipe in place.
@@ -327,7 +327,7 @@ data class LauncherPrefs(
     val folderMatchWindowColor: Boolean = false,
     // Badge folder icons with the summed unread count of their members.
     val folderBadges: Boolean = false,
-    val themeMode: String = "SYSTEM",
+    val themeMode: String = "DARK",
     // SCHEDULE mode's dark window, minutes since midnight; end < start wraps
     // past midnight (defaults: 19:00-07:00).
     val themeScheduleStart: Int = 1140,
@@ -346,7 +346,7 @@ data class LauncherPrefs(
     val widgetCornerRadius: Int = 16,
     val showScrims: Boolean = false,
     val wallpaperZoom: Boolean = true,
-    val autoAddApps: Boolean = false,
+    val autoAddApps: Boolean = true,
     val labelFont: String = "DEFAULT",
     // One ellipsized line everywhere by default: a wrapped name reads as a
     // broken word ("OpenWeathe" over "r"). Per-surface overrides in
@@ -438,7 +438,7 @@ data class LauncherPrefs(
     // Master animation kill switch consulted via ui/Animations.enabled.
     val disableAnimations: Boolean = false,
     // Playback speed multiplier (ui/AnimationSpeed): SLOW/DEFAULT/FAST/FASTER.
-    val animationSpeed: String = "DEFAULT",
+    val animationSpeed: String = "SLOW",
     // App-launch transition style (ui/LaunchAnimation name). REVEAL is the
     // pre-phase-6 clip-reveal behavior; Adaptive icon is the default.
     val launchAnimation: String = "ADAPTIVE_ICON",

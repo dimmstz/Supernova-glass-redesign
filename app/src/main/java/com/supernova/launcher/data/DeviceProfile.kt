@@ -4,7 +4,7 @@ import android.content.Context
 
 // The grid a fresh install starts with, chosen once from the screen the
 // launcher first ran on. A phone starts on the default grid for today's phones,
-// 5 columns by 6 rows under a 5-icon dock.
+// 4 columns by 6 rows under a 5-icon dock.
 // That grid leaves a tablet as a field of stamps with acres between them, so
 // wider screens start with more columns and a fuller dock. Chosen once and then written into the
 // preference store, rather than derived live from the configuration: a
@@ -47,7 +47,7 @@ data class DeviceProfile(
         fun isWide(context: Context): Boolean =
             context.resources.configuration.smallestScreenWidthDp >= MEDIUM_WIDTH_DP
 
-        val PHONE = DeviceProfile(gridCols = 5, gridRows = 6, dockCount = 5, iconScale = 1f)
+        val PHONE = DeviceProfile(gridCols = 4, gridRows = 6, dockCount = 5, iconScale = 1.5f)
         val MEDIUM = DeviceProfile(gridCols = 6, gridRows = 5, dockCount = 6, iconScale = 1.2f)
         val EXPANDED = DeviceProfile(gridCols = 7, gridRows = 6, dockCount = 7, iconScale = 1.35f)
 

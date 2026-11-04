@@ -28,8 +28,8 @@ android {
         applicationId = "com.dimm.lumilite"
         minSdk = 28
         targetSdk = 36
-        versionCode = 17
-        versionName = "v0.3.3"
+        versionCode = 18
+        versionName = "v0.3.4"
     }
 
     signingConfigs {
