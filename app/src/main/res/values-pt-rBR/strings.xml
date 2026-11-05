@@ -94,6 +94,10 @@
     <string name="lock_needs_accessibility">Ative o Lumi Lite nas configurações de Acessibilidade para bloquear a tela</string>
     <string name="hidden_apps">Apps ocultos</string>
     <string name="drawer_groups">Grupos da gaveta de apps</string>
+    <string name="drawer_group_options">Opções dos grupos</string>
+    <string name="drawer_group_options_title">Grupos da gaveta de apps</string>
+    <string name="drawer_group_options_summary">Opções rápidas para organizar a gaveta de apps.</string>
+    <string name="drawer_manage_groups">Gerenciar grupos</string>
     <string name="drawer_style">Estilo da gaveta de apps</string>
     <string name="style_vertical_grid">Grade vertical</string>
     <string name="style_paged_grid">Páginas horizontais</string>

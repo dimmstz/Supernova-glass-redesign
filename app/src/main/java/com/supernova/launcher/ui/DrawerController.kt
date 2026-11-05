@@ -1,6 +1,7 @@
 package com.supernova.launcher.ui
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.GestureDetector
@@ -10,13 +11,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.supernova.launcher.R
+import com.supernova.launcher.SettingsActivity
 import com.supernova.launcher.data.DrawerGroup
 import com.supernova.launcher.data.LaunchableApp
 import com.supernova.launcher.data.LauncherPrefs
@@ -175,7 +179,7 @@ class DrawerController(
     private fun tabSwipeable(): Boolean =
         currentStyle != DrawerStyle.PAGED_GRID &&
             !viewModel.state.value.prefs.drawerTabsNoSwipe &&
-            binding.drawerTabs.visibility == View.VISIBLE && binding.drawerTabs.tabCount >= 2
+            binding.drawerTabsRow.visibility == View.VISIBLE && binding.drawerTabs.tabCount >= 2
 
     private fun attachTabSwipe() {
         val slop = android.view.ViewConfiguration.get(binding.root.context).scaledTouchSlop
@@ -316,13 +320,13 @@ class DrawerController(
         binding.drawerSearchResults.visibility = if (show) View.VISIBLE else View.GONE
         applyListVisibility()
         if (show) {
-            if (binding.drawerTabs.visibility == View.VISIBLE) {
+            if (binding.drawerTabsRow.visibility == View.VISIBLE) {
                 tabsHiddenForSearch = true
-                binding.drawerTabs.visibility = View.GONE
+                binding.drawerTabsRow.visibility = View.GONE
             }
         } else if (tabsHiddenForSearch) {
             tabsHiddenForSearch = false
-            binding.drawerTabs.visibility = View.VISIBLE
+            binding.drawerTabsRow.visibility = View.VISIBLE
         }
         updatePrivateBar()
     }
@@ -555,6 +559,7 @@ class DrawerController(
 
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
         })
+        binding.drawerGroupOptionsButton.setOnClickListener { showGroupOptionsCard() }
         binding.drawerPrivateLock.setOnClickListener {
             viewModel.privateSpace()?.let { viewModel.setPrivateSpaceLocked(!it.locked) }
         }
@@ -1340,7 +1345,7 @@ class DrawerController(
         // show the All list, so the selection resets too.
         val nothingToTab = tabsOff || (groups.isEmpty() && !workTab)
         if (nothingToTab && !privateTab) {
-            tabs.visibility = View.GONE
+            binding.drawerTabsRow.visibility = View.GONE
             if (selectedTab != null) {
                 selectedTab = null
                 if (populated) submit()
@@ -1348,7 +1353,7 @@ class DrawerController(
             return
         }
 
-        tabs.visibility = View.VISIBLE
+        binding.drawerTabsRow.visibility = View.VISIBLE
         // Added unselected: the one-argument addTab selects the first tab
         // it adds, and the listener then overwrote selectedTab mid-rebuild,
         // so every rebuild landed on the default tab.
@@ -1384,6 +1389,45 @@ class DrawerController(
         selectedTab = tabs.getTabAt(target)?.tag
     }
 
+    private fun showGroupOptionsCard() {
+        val density = context.resources.displayMetrics.density
+        val content = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((24 * density).toInt(), 0, (24 * density).toInt(), 0)
+        }
+        val summary = TextView(context).apply {
+            text = context.getString(R.string.drawer_group_options_summary)
+            setTextColor(0xFFB8BBC4.toInt())
+            textSize = 14f
+            setPadding(0, 0, 0, (12 * density).toInt())
+        }
+        val smart = android.widget.Switch(context).apply {
+            text = context.getString(R.string.smart_folders)
+            textSize = 16f
+            isChecked = viewModel.state.value.prefs.smartFolders
+            setOnCheckedChangeListener { _, checked -> viewModel.setSmartFolders(checked) }
+        }
+        val groups = TextView(context).apply {
+            val names = viewModel.drawerTabGroups().joinToString(" • ") { it.name }
+            text = if (names.isEmpty()) context.getString(R.string.drawer_groups) else names
+            setTextColor(0xFF8E929C.toInt())
+            textSize = 13f
+            setPadding(0, (8 * density).toInt(), 0, 0)
+        }
+        content.addView(summary)
+        content.addView(smart)
+        content.addView(groups)
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.drawer_group_options_title)
+            .setView(content)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.drawer_manage_groups) { _, _ ->
+                context.startActivity(Intent(context, SettingsActivity::class.java))
+            }
+            .show()
+    }
+
     // Reconfigures layout manager, cell sizing, background, and scrubber when
     // the drawer-affecting prefs change; guarded so emissions are cheap.
     private fun applyStyle(prefs: LauncherPrefs) {
@@ -1410,13 +1454,14 @@ class DrawerController(
         // BOTTOM sits below the list; TOP restores the original slot after
         // the header row. Visibility (incl. NONE) is rebuildTabs' job.
         val sheet = binding.drawerSheet
+        val tabsRow = binding.drawerTabsRow
         val tabs = binding.drawerTabs
         val wantBottom = DrawerTabBar.fromName(prefs.drawerTabBar) == DrawerTabBar.BOTTOM
-        val currentIndex = sheet.indexOfChild(tabs)
+        val currentIndex = sheet.indexOfChild(tabsRow)
         val targetIndex = if (wantBottom) sheet.childCount - 1 else 1
         if (currentIndex != targetIndex) {
-            sheet.removeView(tabs)
-            sheet.addView(tabs, if (wantBottom) sheet.childCount else 1)
+            sheet.removeView(tabsRow)
+            sheet.addView(tabsRow, if (wantBottom) sheet.childCount else 1)
         }
 
         val searchConfig = SearchBarConfig.decode(prefs.searchBarConfig).drawer
@@ -1474,6 +1519,8 @@ class DrawerController(
         // The group tabs follow the drawer palette too. The Tab type: a
         // short bar under the label (Classic) or a pill behind it (Bubble).
         tabs.setTabTextColors(withAlpha(resolvedForBar.text, TAB_TEXT_ALPHA), resolvedForBar.text)
+        binding.drawerGroupOptionsButton.imageTintList =
+            android.content.res.ColorStateList.valueOf(resolvedForBar.text)
         if (DrawerTabStyle.fromName(prefs.drawerTabStyle) == DrawerTabStyle.BUBBLE) {
             val pill = GradientDrawable().apply {
                 cornerRadius = TAB_BUBBLE_RADIUS_DP * density
