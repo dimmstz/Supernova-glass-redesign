@@ -99,6 +99,7 @@
     <string name="drawer_group_options_title">App drawer groups</string>
     <string name="drawer_group_options_summary">Quick options for organizing your app drawer.</string>
     <string name="drawer_manage_groups">Manage groups</string>
+    <string name="drawer_manage_groups_title">Manage drawer groups</string>
     <string name="drawer_style">Drawer style</string>
     <string name="style_vertical_grid">Vertical grid</string>
     <string name="style_paged_grid">Horizontal pages</string>

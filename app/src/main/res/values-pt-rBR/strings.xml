@@ -98,6 +98,7 @@
     <string name="drawer_group_options_title">Grupos da gaveta de apps</string>
     <string name="drawer_group_options_summary">Opções rápidas para organizar a gaveta de apps.</string>
     <string name="drawer_manage_groups">Gerenciar grupos</string>
+    <string name="drawer_manage_groups_title">Gerenciar grupos da gaveta</string>
     <string name="drawer_style">Estilo da gaveta de apps</string>
     <string name="style_vertical_grid">Grade vertical</string>
     <string name="style_paged_grid">Páginas horizontais</string>

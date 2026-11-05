@@ -1,7 +1,6 @@
 package com.supernova.launcher.ui
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.GestureDetector
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.supernova.launcher.R
-import com.supernova.launcher.SettingsActivity
 import com.supernova.launcher.data.DrawerGroup
 import com.supernova.launcher.data.LaunchableApp
 import com.supernova.launcher.data.LauncherPrefs
@@ -1422,9 +1420,37 @@ class DrawerController(
             .setTitle(R.string.drawer_group_options_title)
             .setView(content)
             .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(R.string.drawer_manage_groups) { _, _ ->
-                context.startActivity(Intent(context, SettingsActivity::class.java))
+            .setPositiveButton(R.string.drawer_manage_groups) { _, _ -> showManageGroupsCard() }
+            .show()
+    }
+
+    private fun showManageGroupsCard() {
+        val density = context.resources.displayMetrics.density
+        val content = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((24 * density).toInt(), 0, (24 * density).toInt(), 0)
+        }
+        val groups = viewModel.drawerTabGroups() + viewModel.drawerFolderGroups()
+        if (groups.isEmpty()) {
+            content.addView(TextView(context).apply {
+                text = context.getString(R.string.drawer_groups)
+                textSize = 16f
+            })
+        } else {
+            groups.sortedBy { it.order }.forEach { group ->
+                val count = viewModel.appsInGroup(group).size
+                content.addView(TextView(context).apply {
+                    text = "${group.name}  ·  $count"
+                    textSize = 16f
+                    setTextColor(0xFFF2F3F7.toInt())
+                    setPadding(0, (10 * density).toInt(), 0, (10 * density).toInt())
+                })
             }
+        }
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.drawer_manage_groups_title)
+            .setView(content)
+            .setPositiveButton(R.string.cancel, null)
             .show()
     }
 

@@ -1480,10 +1480,9 @@ class LauncherViewModel(
         }
     }
 
-    // Smart Folders: FOLDER groups generated from on-device categories. The
-    // toggle owns the whole lifecycle - on generates, off removes only groups
-    // carrying the smart marker. Turning them on again brings back the ones
-    // the user deleted, too.
+    // Smart groups: TAB groups generated from on-device categories. Each
+    // category gets its own drawer tab; the toggle owns the lifecycle and
+    // removes only groups carrying the smart marker when disabled.
     fun setSmartFolders(value: Boolean) {
         viewModelScope.launch {
             preferences.setSmartFolders(value)
@@ -1526,7 +1525,7 @@ class LauncherViewModel(
                     name = getApplication<Application>()
                         .getString(com.supernova.launcher.ui.settings.EnumLabels.of(category)),
                     members = members,
-                    type = DrawerGroupType.FOLDER,
+                    type = DrawerGroupType.TAB,
                     smart = true
                 )
             }
