@@ -1495,13 +1495,24 @@ class LauncherViewModel(
         }
     }
 
+    fun setSmartGroupMode(value: String) {
+        val mode = if (value == "FOLDERS") "FOLDERS" else "TABS"
+        viewModelScope.launch {
+            preferences.setSmartGroupMode(mode)
+            if (state.value.prefs.smartFolders) regenerateSmartFolders(mode = mode)
+        }
+    }
+
     // freshInstall: the one pass a new install makes as the wizard opens (see
     // seedDefaultLayout). It creates only the folders that start small; the
     // bigger categories are dismissed, as if the user had deleted them, so
     // no later pass brings them back. After that the folders are the user's:
     // they grow as apps install, and turning Smart Folders on again brings
     // the big ones back too.
-    private suspend fun regenerateSmartFolders(freshInstall: Boolean = false) {
+    private suspend fun regenerateSmartFolders(
+        freshInstall: Boolean = false,
+        mode: String? = null
+    ) {
         val generated = withContext(Dispatchers.Default) {
             val hidden = state.value.prefs.hiddenApps
             // Fresh enumeration: the install hook fires before appsFlow updates.
@@ -1525,7 +1536,11 @@ class LauncherViewModel(
                     name = getApplication<Application>()
                         .getString(com.supernova.launcher.ui.settings.EnumLabels.of(category)),
                     members = members,
-                    type = DrawerGroupType.TAB,
+                    type = if ((mode ?: state.value.prefs.smartGroupMode) == "FOLDERS") {
+                        DrawerGroupType.FOLDER
+                    } else {
+                        DrawerGroupType.TAB
+                    },
                     smart = true
                 )
             }

@@ -86,6 +86,7 @@ class LauncherPreferences(private val context: Context) {
             target[StoreKeys.drawerAutoClose] = prefs.drawerAutoClose
             target[StoreKeys.drawerFoldersFirst] = prefs.drawerFoldersFirst
             target[StoreKeys.smartFolders] = prefs.smartFolders
+            target[StoreKeys.smartGroupMode] = prefs.smartGroupMode
             target[StoreKeys.smartFoldersDismissed] = prefs.smartFoldersDismissed
             target[StoreKeys.drawerIconScale] = prefs.drawerIconScale.coerceIn(0.7f, 2f)
             target[StoreKeys.drawerMatchDesktop] = prefs.drawerMatchDesktop
@@ -294,6 +295,7 @@ class LauncherPreferences(private val context: Context) {
             drawerAutoClose = values[StoreKeys.drawerAutoClose] ?: false,
             drawerFoldersFirst = values[StoreKeys.drawerFoldersFirst] ?: true,
             smartFolders = values[StoreKeys.smartFolders] ?: false,
+            smartGroupMode = values[StoreKeys.smartGroupMode] ?: "TABS",
             smartFoldersDismissed = values[StoreKeys.smartFoldersDismissed] ?: emptySet(),
             drawerIconScale = (values[StoreKeys.drawerIconScale] ?: 1f).coerceIn(0.7f, 2f),
             drawerMatchDesktop = values[StoreKeys.drawerMatchDesktop] ?: true,
@@ -587,6 +589,9 @@ class LauncherPreferences(private val context: Context) {
     suspend fun setDrawerFoldersFirst(value: Boolean) = put(StoreKeys.drawerFoldersFirst, value)
 
     suspend fun setSmartFolders(value: Boolean) = put(StoreKeys.smartFolders, value)
+
+    suspend fun setSmartGroupMode(value: String) =
+        put(StoreKeys.smartGroupMode, if (value == "FOLDERS") "FOLDERS" else "TABS")
 
     // Smart Folders bookkeeping: one atomic edit replaces every smart-marked
     // group so a regeneration can never interleave with a user edit. The

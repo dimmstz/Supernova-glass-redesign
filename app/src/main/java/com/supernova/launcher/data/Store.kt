@@ -83,6 +83,7 @@ object StoreKeys {
     val drawerAutoClose: Preferences.Key<Boolean> = booleanPreferencesKey("drawer_auto_close")
     val drawerFoldersFirst: Preferences.Key<Boolean> = booleanPreferencesKey("drawer_folders_first")
     val smartFolders: Preferences.Key<Boolean> = booleanPreferencesKey("smart_folders")
+    val smartGroupMode: Preferences.Key<String> = stringPreferencesKey("smart_group_mode")
     val smartFoldersDismissed: Preferences.Key<Set<String>> = stringSetPreferencesKey("smart_folders_dismissed")
     val drawerIconScale: Preferences.Key<Float> = floatPreferencesKey("drawer_icon_scale")
     val drawerMatchDesktop: Preferences.Key<Boolean> = booleanPreferencesKey("drawer_match_desktop")

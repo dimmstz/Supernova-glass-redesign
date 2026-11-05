@@ -123,6 +123,11 @@
     <string name="drawer_auto_close">Close drawer after launching</string>
     <string name="drawer_folders_first">Show drawer folders first</string>
     <string name="smart_folders">Smart folders</string>
+    <string name="smart_groups">Smart groups</string>
+    <string name="drawer_category_folders">Category folders</string>
+    <string name="drawer_category_tabs">Category tabs</string>
+    <string name="drawer_category_folders_summary">Organize apps inside the drawer grid.</string>
+    <string name="drawer_category_tabs_summary">Create a separate tab for each category.</string>
     <string name="category_games">Games</string>
     <string name="category_entertainment">Entertainment</string>
     <string name="category_image">Photos</string>

@@ -122,6 +122,11 @@
     <string name="drawer_auto_close">Fechar gaveta após abrir um app</string>
     <string name="drawer_folders_first">Mostrar pastas da gaveta primeiro</string>
     <string name="smart_folders">Pastas inteligentes</string>
+    <string name="smart_groups">Grupos inteligentes</string>
+    <string name="drawer_category_folders">Pastas de categorias</string>
+    <string name="drawer_category_tabs">Abas de categorias</string>
+    <string name="drawer_category_folders_summary">Organizam os apps dentro da grade da gaveta.</string>
+    <string name="drawer_category_tabs_summary">Criam uma aba separada para cada categoria.</string>
     <string name="category_games">Jogos</string>
     <string name="category_entertainment">Entretenimento</string>
     <string name="category_image">Fotos</string>

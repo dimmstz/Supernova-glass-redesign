@@ -214,8 +214,10 @@ data class LauncherPrefs(
     // FOLDER-type groups render before apps in the drawer grid; false merges
     // them into the list alphabetically.
     val drawerFoldersFirst: Boolean = true,
-    // Auto-generate FOLDER groups from on-device app categories.
+    // Auto-generate category groups from on-device app categories.
     val smartFolders: Boolean = false,
+    // Smart category presentation: TABS or FOLDERS.
+    val smartGroupMode: String = "TABS",
     // Smart folders the user deleted, or a fresh install left out as too big,
     // by name: regenerating on an install leaves them out. Turning Smart
     // Folders on again clears it.

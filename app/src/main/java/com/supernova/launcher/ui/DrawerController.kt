@@ -1399,22 +1399,51 @@ class DrawerController(
             textSize = 14f
             setPadding(0, 0, 0, (12 * density).toInt())
         }
+        val smartTitle = TextView(context).apply {
+            text = context.getString(R.string.smart_groups)
+            setTextColor(0xFFF2F3F7.toInt())
+            textSize = 16f
+        }
         val smart = android.widget.Switch(context).apply {
-            text = context.getString(R.string.smart_folders)
+            text = context.getString(R.string.smart_groups)
             textSize = 16f
             isChecked = viewModel.state.value.prefs.smartFolders
             setOnCheckedChangeListener { _, checked -> viewModel.setSmartFolders(checked) }
         }
-        val groups = TextView(context).apply {
-            val names = viewModel.drawerTabGroups().joinToString(" • ") { it.name }
-            text = if (names.isEmpty()) context.getString(R.string.drawer_groups) else names
-            setTextColor(0xFF8E929C.toInt())
-            textSize = 13f
-            setPadding(0, (8 * density).toInt(), 0, 0)
+        val mode = android.widget.RadioGroup(context).apply {
+            orientation = android.widget.RadioGroup.VERTICAL
+            val folders = android.widget.RadioButton(context).apply {
+                id = View.generateViewId()
+                text = context.getString(R.string.drawer_category_folders)
+                textSize = 16f
+            }
+            val tabs = android.widget.RadioButton(context).apply {
+                id = View.generateViewId()
+                text = context.getString(R.string.drawer_category_tabs)
+                textSize = 16f
+            }
+            addView(folders)
+            addView(tabs)
+            if (viewModel.state.value.prefs.smartGroupMode == "FOLDERS") {
+                check(folders.id)
+            } else {
+                check(tabs.id)
+            }
+            setOnCheckedChangeListener { group, checkedId ->
+                if (checkedId == folders.id) viewModel.setSmartGroupMode("FOLDERS")
+                if (checkedId == tabs.id) viewModel.setSmartGroupMode("TABS")
+            }
         }
         content.addView(summary)
+        content.addView(smartTitle)
         content.addView(smart)
-        content.addView(groups)
+        content.addView(TextView(context).apply {
+            text = context.getString(R.string.drawer_category_tabs_summary)
+            setTextColor(0xFF8E929C.toInt())
+            textSize = 13f
+            setPadding(0, (4 * density).toInt(), 0, (4 * density).toInt())
+        })
+        content.addView(mode)
 
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.drawer_group_options_title)
@@ -1430,23 +1459,34 @@ class DrawerController(
             orientation = LinearLayout.VERTICAL
             setPadding((24 * density).toInt(), 0, (24 * density).toInt(), 0)
         }
-        val groups = viewModel.drawerTabGroups() + viewModel.drawerFolderGroups()
-        if (groups.isEmpty()) {
+        fun addSection(titleRes: Int, groups: List<DrawerGroup>) {
+            if (groups.isEmpty()) return
             content.addView(TextView(context).apply {
-                text = context.getString(R.string.drawer_groups)
-                textSize = 16f
+                text = context.getString(titleRes)
+                textSize = 15f
+                setTextColor(0xFF9EA3AE.toInt())
+                setPadding(0, (8 * density).toInt(), 0, (4 * density).toInt())
             })
-        } else {
             groups.sortedBy { it.order }.forEach { group ->
                 val count = viewModel.appsInGroup(group).size
                 content.addView(TextView(context).apply {
                     text = "${group.name}  ·  $count"
                     textSize = 16f
                     setTextColor(0xFFF2F3F7.toInt())
-                    setPadding(0, (10 * density).toInt(), 0, (10 * density).toInt())
+                    setPadding(0, (8 * density).toInt(), 0, (8 * density).toInt())
                 })
             }
         }
+        val tabs = viewModel.drawerTabGroups()
+        val folders = viewModel.drawerFolderGroups()
+        if (tabs.isEmpty() && folders.isEmpty()) {
+            content.addView(TextView(context).apply {
+                text = context.getString(R.string.drawer_groups)
+                textSize = 16f
+            })
+        }
+        addSection(R.string.drawer_category_tabs, tabs)
+        addSection(R.string.drawer_category_folders, folders)
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.drawer_manage_groups_title)
             .setView(content)
