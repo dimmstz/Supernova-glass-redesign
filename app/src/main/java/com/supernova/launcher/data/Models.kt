@@ -118,7 +118,7 @@ data class LauncherPrefs(
     // Phone grid, 4 columns by 6 rows (see DeviceProfile).
     val gridRows: Int = 6,
     val gridCols: Int = 4,
-    val dockCount: Int = 5,
+    val dockCount: Int = 4,
     val iconScale: Float = 1.5f,
     val showLabels: Boolean = true,
     val wallpaperScroll: Boolean = true,
@@ -141,7 +141,7 @@ data class LauncherPrefs(
     val hiddenApps: Set<String> = emptySet(),
     val gestureBindings: Set<String> = emptySet(),
     // Drawer tabs as "Name|key1,key2,..." entries; the All tab is implicit.
-    val drawerGroups: Set<String> = emptySet(),
+    val drawerGroups: Set<String> = DrawerGroup.defaultGroups().map { it.encode() }.toSet(),
     // Line by default.
     val pageIndicatorStyle: String = "LINE",
     // The indicator only shows while the page moves; off keeps it up.
@@ -161,8 +161,8 @@ data class LauncherPrefs(
     val dockEnabled: Boolean = true,
     // Dock rank space is page * dockCount + slot; extra pages swipe in place.
     val dockPages: Int = 1,
-    val dockBgStyle: String = "NONE",
-    val dockBgOpacity: Float = 0.3f,
+    val dockBgStyle: String = "PILL",
+    val dockBgOpacity: Float = 0.5f,
     // Dock background runs flush to the window's bottom edge (no side or
     // bottom margins, square bottom corners), meeting the transparent nav
     // bar the way a draw-behind-navigation option reads. The window
@@ -184,12 +184,12 @@ data class LauncherPrefs(
     val widgetPadding: Int = 0,
     val drawerStyle: String = "VERTICAL_GRID",
     // 0 = derive from screen width (the pre-setting behavior).
-    val drawerColumns: Int = 0,
+    val drawerColumns: Int = 4,
     // Rows for the paged drawer style; 0 = derive from the sheet height.
     val drawerRows: Int = 0,
     // Opening the drawer focuses search and shows the IME; the keyboard goes
     // back down with the sheet on close.
-    val drawerAutoKeyboard: Boolean = true,
+    val drawerAutoKeyboard: Boolean = false,
     // Paged drawer style only, the Horizontal Scroll group:
     // wrap past the last page, and the effect used between pages.
     val drawerInfiniteScroll: Boolean = false,
@@ -205,7 +205,7 @@ data class LauncherPrefs(
     // Isolate tabs: a sideways swipe on the list stays on the tab.
     val drawerTabsNoSwipe: Boolean = false,
     // Horizontal most-launched strip pinned above the drawer list.
-    val drawerFrequentRow: Boolean = true,
+    val drawerFrequentRow: Boolean = false,
     // Keep the scroll position across close/reopen instead of resetting to top.
     val drawerRememberPosition: Boolean = false,
     // Hide the drawer when an app is launched from it; false keeps it open
@@ -215,7 +215,7 @@ data class LauncherPrefs(
     // them into the list alphabetically.
     val drawerFoldersFirst: Boolean = true,
     // Auto-generate FOLDER groups from on-device app categories.
-    val smartFolders: Boolean = true,
+    val smartFolders: Boolean = false,
     // Smart folders the user deleted, or a fresh install left out as too big,
     // by name: regenerating on an install leaves them out. Turning Smart
     // Folders on again clears it.
@@ -224,7 +224,7 @@ data class LauncherPrefs(
     // When on, the drawer follows iconScale and its scale slider hides. On
     // by default.
     val drawerMatchDesktop: Boolean = true,
-    val drawerBgOpacity: Float = 1f,
+    val drawerBgOpacity: Float = 0.5f,
     // On by default.
     val drawerFastScroller: Boolean = true,
     // Overscrolling past the bottom of the drawer list opens global search.
@@ -361,8 +361,8 @@ data class LauncherPrefs(
     val dockAutoClose: Boolean = false,
     val dockRememberPosition: Boolean = false,
     // Extra padding inside the dock bar, in dp per axis.
-    val dockPaddingH: Int = 0,
-    val dockPaddingV: Int = 0,
+    val dockPaddingH: Int = 10,
+    val dockPaddingV: Int = 10,
     // Global search: web engine (WebProvider name) and per-provider toggles.
     val searchWebProvider: String = "GOOGLE",
     val searchContacts: Boolean = false,
@@ -559,6 +559,12 @@ data class DrawerGroup(
         private const val ICON_RAW_FIELD = 8
         private const val ICON_PHOTO_FIELD = 9
         private const val RAW_MARKER = "raw"
+
+        fun defaultGroups(): List<DrawerGroup> = listOf(
+            DrawerGroup("Jogos", emptySet(), order = 0, type = DrawerGroupType.TAB, keepInMain = true),
+            DrawerGroup("Redes sociais", emptySet(), order = 1, type = DrawerGroupType.TAB, keepInMain = true),
+            DrawerGroup("Bancos", emptySet(), order = 2, type = DrawerGroupType.TAB, keepInMain = true)
+        )
 
         fun decode(raw: String): DrawerGroup? {
             val parts = raw.split('|')
