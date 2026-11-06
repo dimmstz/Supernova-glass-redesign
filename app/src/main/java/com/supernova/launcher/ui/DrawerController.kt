@@ -1399,28 +1399,16 @@ class DrawerController(
             textSize = 14f
             setPadding(0, 0, 0, (12 * density).toInt())
         }
-        val sectionTitle = TextView(context).apply {
+        val smartTitle = TextView(context).apply {
             text = context.getString(R.string.smart_groups)
             setTextColor(0xFFF2F3F7.toInt())
             textSize = 16f
-            setPadding(0, (4 * density).toInt(), 0, (4 * density).toInt())
         }
         val smart = android.widget.Switch(context).apply {
-            text = context.getString(R.string.smart_groups_enable)
+            text = context.getString(R.string.smart_groups)
             textSize = 16f
             isChecked = viewModel.state.value.prefs.smartFolders
             setOnCheckedChangeListener { _, checked -> viewModel.setSmartFolders(checked) }
-        }
-        val modeTitle = TextView(context).apply {
-            text = context.getString(R.string.smart_groups_mode)
-            setTextColor(0xFFF2F3F7.toInt())
-            textSize = 15f
-            setPadding(0, (12 * density).toInt(), 0, (2 * density).toInt())
-        }
-        val modeSummary = TextView(context).apply {
-            setTextColor(0xFF8E929C.toInt())
-            textSize = 13f
-            setPadding(0, 0, 0, (4 * density).toInt())
         }
         val mode = android.widget.RadioGroup(context).apply {
             orientation = android.widget.RadioGroup.VERTICAL
@@ -1438,34 +1426,23 @@ class DrawerController(
             addView(tabs)
             if (viewModel.state.value.prefs.smartGroupMode == "FOLDERS") {
                 check(folders.id)
-                modeSummary.text = context.getString(R.string.drawer_category_folders_summary)
             } else {
                 check(tabs.id)
-                modeSummary.text = context.getString(R.string.drawer_category_tabs_summary)
             }
-            folders.isEnabled = smart.isChecked
-            tabs.isEnabled = smart.isChecked
-            smart.setOnCheckedChangeListener { _, checked ->
-                folders.isEnabled = checked
-                tabs.isEnabled = checked
-                viewModel.setSmartFolders(checked)
-            }
-            setOnCheckedChangeListener { _, checkedId ->
-                if (checkedId == folders.id) {
-                    modeSummary.text = context.getString(R.string.drawer_category_folders_summary)
-                    viewModel.setSmartGroupMode("FOLDERS")
-                }
-                if (checkedId == tabs.id) {
-                    modeSummary.text = context.getString(R.string.drawer_category_tabs_summary)
-                    viewModel.setSmartGroupMode("TABS")
-                }
+            setOnCheckedChangeListener { group, checkedId ->
+                if (checkedId == folders.id) viewModel.setSmartGroupMode("FOLDERS")
+                if (checkedId == tabs.id) viewModel.setSmartGroupMode("TABS")
             }
         }
         content.addView(summary)
-        content.addView(sectionTitle)
+        content.addView(smartTitle)
         content.addView(smart)
-        content.addView(modeTitle)
-        content.addView(modeSummary)
+        content.addView(TextView(context).apply {
+            text = context.getString(R.string.drawer_category_tabs_summary)
+            setTextColor(0xFF8E929C.toInt())
+            textSize = 13f
+            setPadding(0, (4 * density).toInt(), 0, (4 * density).toInt())
+        })
         content.addView(mode)
 
         MaterialAlertDialogBuilder(context)
