@@ -124,6 +124,8 @@
     <string name="drawer_folders_first">Show drawer folders first</string>
     <string name="smart_folders">Smart folders</string>
     <string name="smart_groups">Smart groups</string>
+    <string name="smart_groups_enable">Enable smart groups</string>
+    <string name="smart_groups_mode">How to organize categories</string>
     <string name="drawer_category_folders">Category folders</string>
     <string name="drawer_category_tabs">Category tabs</string>
     <string name="drawer_category_folders_summary">Organize apps inside the drawer grid.</string>
