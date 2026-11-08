@@ -13,7 +13,8 @@ enum class SmartCategory {
     NEWS,
     MAPS,
     PRODUCTIVITY,
-    FINANCE
+    FINANCE,
+    SHOPPING
 }
 
 // Resolves an app to a Smart Folder category: the curated package-prefix map
@@ -106,14 +107,31 @@ object AppCategories {
         "com.coinbase" to SmartCategory.FINANCE,
         "com.zerodha" to SmartCategory.FINANCE,
         "in.zerodha" to SmartCategory.FINANCE,
-        "com.groww" to SmartCategory.FINANCE
+        "com.groww" to SmartCategory.FINANCE,
+        "com.nu.production" to SmartCategory.FINANCE,
+        "com.itau" to SmartCategory.FINANCE,
+        "com.bradesco" to SmartCategory.FINANCE,
+        "com.santander" to SmartCategory.FINANCE,
+        "br.com.intermedium" to SmartCategory.FINANCE,
+        "com.bancopan" to SmartCategory.FINANCE,
+        "com.mercadopago" to SmartCategory.FINANCE,
+        "com.picpay" to SmartCategory.FINANCE,
+        // Shopping and delivery
+        "com.mercadolibre" to SmartCategory.SHOPPING,
+        "com.amazon" to SmartCategory.SHOPPING,
+        "com.shopee" to SmartCategory.SHOPPING,
+        "com.alibaba" to SmartCategory.SHOPPING,
+        "com.grupoboticario" to SmartCategory.SHOPPING,
+        "com.magazineluiza" to SmartCategory.SHOPPING,
+        "com.ifood" to SmartCategory.SHOPPING,
+        "com.rappi" to SmartCategory.SHOPPING
     )
 
     // systemCategory is ApplicationInfo.category (CATEGORY_UNDEFINED when the
     // manifest doesn't declare one). Returns null when the app fits nowhere.
-    fun categoryOf(packageName: String, systemCategory: Int): SmartCategory? {
+    fun categoryOf(packageName: String, systemCategory: Int, label: String = ""): SmartCategory? {
         prefixMap.firstOrNull { packageName.startsWith(it.first) }?.let { return it.second }
-        return when (systemCategory) {
+        val system = when (systemCategory) {
             ApplicationInfo.CATEGORY_GAME -> SmartCategory.GAMES
             ApplicationInfo.CATEGORY_AUDIO -> SmartCategory.ENTERTAINMENT
             ApplicationInfo.CATEGORY_VIDEO -> SmartCategory.ENTERTAINMENT
@@ -122,6 +140,20 @@ object AppCategories {
             ApplicationInfo.CATEGORY_NEWS -> SmartCategory.NEWS
             ApplicationInfo.CATEGORY_MAPS -> SmartCategory.MAPS
             ApplicationInfo.CATEGORY_PRODUCTIVITY -> SmartCategory.PRODUCTIVITY
+            else -> null
+        }
+        if (system != null) return system
+        val text = label.lowercase()
+        return when {
+            listOf("jogo", "game", "games").any(text::contains) -> SmartCategory.GAMES
+            listOf("banco", "bank", "finan", "pagamento", "wallet", "carteira").any(text::contains) -> SmartCategory.FINANCE
+            listOf("compras", "shopping", "loja", "store", "mercado", "delivery").any(text::contains) -> SmartCategory.SHOPPING
+            listOf("chat", "mensag", "social", "comunidade").any(text::contains) -> SmartCategory.SOCIAL
+            listOf("foto", "photo", "camera", "galeria", "gallery").any(text::contains) -> SmartCategory.IMAGE
+            listOf("mapa", "map", "gps", "viagem", "transporte", "taxi").any(text::contains) -> SmartCategory.MAPS
+            listOf("notas", "notes", "calend", "email", "e-mail", "document", "office", "tarefa").any(text::contains) -> SmartCategory.PRODUCTIVITY
+            listOf("notícia", "noticia", "news", "jornal").any(text::contains) -> SmartCategory.NEWS
+            listOf("music", "música", "video", "vídeo", "stream", "filme", "tv").any(text::contains) -> SmartCategory.ENTERTAINMENT
             else -> null
         }
     }

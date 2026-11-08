@@ -1535,11 +1535,25 @@ class LauncherViewModel(
                 val key = hiddenKey(app)
                 if (key in claimed) return@forEach
                 val category = com.supernova.launcher.data.AppCategories.categoryOf(
-                    app.packageName, catalog.appCategory(app.packageName)
+                    app.packageName, catalog.appCategory(app.packageName), app.label
                 ) ?: return@forEach
                 byCategory.getOrPut(category) { mutableSetOf() }.add(key)
             }
-            byCategory.filterValues { it.size >= SMART_FOLDER_MIN_APPS }.map { (category, members) ->
+            val categoryOrder = listOf(
+                com.supernova.launcher.data.SmartCategory.GAMES,
+                com.supernova.launcher.data.SmartCategory.SOCIAL,
+                com.supernova.launcher.data.SmartCategory.FINANCE,
+                com.supernova.launcher.data.SmartCategory.SHOPPING,
+                com.supernova.launcher.data.SmartCategory.PRODUCTIVITY,
+                com.supernova.launcher.data.SmartCategory.ENTERTAINMENT,
+                com.supernova.launcher.data.SmartCategory.MAPS,
+                com.supernova.launcher.data.SmartCategory.IMAGE,
+                com.supernova.launcher.data.SmartCategory.NEWS
+            )
+            byCategory.filterValues { it.size >= SMART_FOLDER_MIN_APPS }
+                .toList()
+                .sortedBy { categoryOrder.indexOf(it.first).takeIf { index -> index >= 0 } ?: Int.MAX_VALUE }
+                .mapIndexed { index, (category, members) ->
                 DrawerGroup(
                     name = getApplication<Application>()
                         .getString(com.supernova.launcher.ui.settings.EnumLabels.of(category)),
@@ -1549,6 +1563,7 @@ class LauncherViewModel(
                     } else {
                         DrawerGroupType.TAB
                     },
+                    order = index,
                     smart = true
                 )
             }
@@ -1703,7 +1718,9 @@ class LauncherViewModel(
         // itself, before drawing with whatever the catalog has.
         const val STARTUP_VALVE_GIVE_UP_MS = 3500L
         // Categories with fewer apps than this don't earn a smart folder.
-        const val SMART_FOLDER_MIN_APPS = 3
+        // Two apps are enough to make a useful category without creating a
+        // noisy one-app folder; this also helps smaller Brazilian app sets.
+        const val SMART_FOLDER_MIN_APPS = 2
         // ...and on a fresh install, nor do ones with more than this.
         const val SMART_FOLDER_FRESH_INSTALL_MAX_APPS = 4
     }

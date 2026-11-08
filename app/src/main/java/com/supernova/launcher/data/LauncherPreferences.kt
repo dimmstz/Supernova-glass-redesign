@@ -215,7 +215,16 @@ class LauncherPreferences(private val context: Context) {
         // The stored drawer groups once a smart-folder regeneration lands:
         // the user's own groups as they were, plus the generated folders.
         fun withSmartGroups(stored: Set<String>, generated: List<DrawerGroup>, dismissed: Set<String>): Set<String> {
-            val userGroups = stored.filterNot { DrawerGroup.decode(it)?.smart == true }.toSet()
+            val seedNames = DrawerGroup.defaultGroups().map { it.name }.toSet()
+            val decodedUsers = stored.mapNotNull { DrawerGroup.decode(it) }
+                .filterNot { it.smart }
+            // The three factory category rows start empty. Once Smart Groups
+            // is enabled, let the generated category own those rows instead
+            // of leaving duplicate empty tabs beside populated smart tabs.
+            val userGroups = decodedUsers
+                .filterNot { it.name in seedNames && it.members.isEmpty() && !it.hasCustomIcon }
+                .map { it.encode() }
+                .toSet()
             val userNames = userGroups.mapNotNull { DrawerGroup.decode(it)?.name }.toSet()
             // A smart folder moved in the list keeps its place when it's
             // generated again.
