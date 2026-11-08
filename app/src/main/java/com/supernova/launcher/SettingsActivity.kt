@@ -78,10 +78,6 @@ import kotlin.math.abs
 
 class SettingsActivity : AppCompatActivity() {
 
-    companion object {
-        const val EXTRA_OPEN_DRAWER_GROUPS = "open_drawer_groups"
-    }
-
     private enum class Tab { SETTINGS, STYLE }
 
     private lateinit var binding: ActivitySettingsBinding
@@ -2374,6 +2370,7 @@ class SettingsActivity : AppCompatActivity() {
         // The home search bar's "Search bar settings" row opens the bar's
         // own page, not just the Search page that leads to it.
         const val EXTRA_OPEN_SEARCH_BAR = "extra_open_search_bar"
+        const val EXTRA_OPEN_DRAWER_GROUPS = "open_drawer_groups"
         const val EXTRA_SECTION_TITLE_RES = "extra_section_title_res"
         const val EXTRA_HIGHLIGHT_TITLE_RES = "extra_highlight_title_res"
 
