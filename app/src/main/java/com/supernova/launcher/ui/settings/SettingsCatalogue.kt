@@ -489,6 +489,22 @@ object SettingsCatalogue {
                     preview = { p, v -> p.copy(dockBgOpacity = v / 100f) },
                     visibleIf = { it.dockEnabled && DockBgStyle.fromName(it.dockBgStyle) != DockBgStyle.NONE }
                 ),
+                SettingItem.Slider(
+                    R.string.dock_bg_blur,
+                    min = 0, max = 100,
+                    step = 5,
+                    get = { it.dockBgBlur },
+                    set = { viewModel.setDockBgBlur(it) },
+                    display = { context.getString(R.string.opacity_percent, it) },
+                    preview = { p, v -> p.copy(dockBgBlur = v) },
+                    visibleIf = { it.dockEnabled && DockBgStyle.fromName(it.dockBgStyle) != DockBgStyle.NONE }
+                ),
+                SettingItem.Toggle(
+                    R.string.dock_bg_light,
+                    get = { it.dockBgLight },
+                    set = { viewModel.setDockBgLight(it) },
+                    visibleIf = { it.dockEnabled && DockBgStyle.fromName(it.dockBgStyle) != DockBgStyle.NONE }
+                ),
                 SettingItem.Toggle(
                     R.string.dock_bg_behind_nav,
                     get = { it.dockBgBehindNav },
@@ -703,6 +719,20 @@ object SettingsCatalogue {
                     set = { viewModel.setDrawerBgOpacity(it / 100f) },
                     display = { context.getString(R.string.opacity_percent, it) },
                     preview = { p, v -> p.copy(drawerBgOpacity = v / 100f) }
+                ),
+                SettingItem.Slider(
+                    R.string.drawer_bg_blur,
+                    min = 0, max = 100,
+                    step = 5,
+                    get = { it.drawerBgBlur },
+                    set = { viewModel.setDrawerBgBlur(it) },
+                    display = { context.getString(R.string.opacity_percent, it) },
+                    preview = { p, v -> p.copy(drawerBgBlur = v) }
+                ),
+                SettingItem.Toggle(
+                    R.string.drawer_bg_light,
+                    get = { it.drawerBgLight },
+                    set = { viewModel.setDrawerBgLight(it) }
                 ),
                 SettingItem.Toggle(
                     R.string.drawer_labels,

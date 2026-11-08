@@ -43,6 +43,8 @@ object Styles {
         val folderBgColor: String,
         val drawerAlpha: Float,
         val dockAlpha: Float,
+        val drawerLight: Boolean,
+        val dockLight: Boolean,
         val generation: Int
     )
 
@@ -61,7 +63,8 @@ object Styles {
         val key = Key(
             prefs.styleConfig, prefs.paletteSource, prefs.paletteSeed, night,
             prefs.accentColor, prefs.drawerBgColor, prefs.folderBgColor,
-            prefs.drawerBgOpacity, prefs.dockBgOpacity, wallpaperGeneration
+            prefs.drawerBgOpacity, prefs.dockBgOpacity,
+            prefs.drawerBgLight, prefs.dockBgLight, wallpaperGeneration
         )
         cachedStyles?.let { if (key == cachedKey) return it }
 
@@ -103,7 +106,8 @@ object Styles {
         }
 
         val drawerLegacy = LabelStyler.parseColor(
-            prefs.drawerBgColor, context.getColor(R.color.drawerBackground)
+            prefs.drawerBgColor,
+            if (prefs.drawerBgLight) 0xFFF7F9FF.toInt() else context.getColor(R.color.drawerBackground)
         )
         // The FOLDER surface colors the folder *window*, so its default is the
         // opaque theme surface; the translucent preview-plate default lives in
@@ -113,7 +117,11 @@ object Styles {
             prefs.folderBgColor, themeSurface
         )
 
-        val drawer = resolved(SurfaceId.DRAWER, drawerLegacy, themeText, prefs.drawerBgOpacity)
+        val drawer = resolved(
+            SurfaceId.DRAWER, drawerLegacy,
+            if (prefs.drawerBgLight) 0xFF171A24.toInt() else themeText,
+            prefs.drawerBgOpacity
+        )
 
         val styles = ResolvedStyles(
             mapOf(
@@ -125,7 +133,10 @@ object Styles {
                     drawer.text, null, drawer.accent
                 ),
                 SurfaceId.DOCK to resolved(
-                    SurfaceId.DOCK, (0xFF shl 24) or DOCK_BASE_RGB, onWallpaper, prefs.dockBgOpacity
+                    SurfaceId.DOCK,
+                    if (prefs.dockBgLight) 0xFFF7F9FF.toInt() else (0xFF shl 24) or DOCK_BASE_RGB,
+                    if (prefs.dockBgLight) 0xFF171A24.toInt() else onWallpaper,
+                    prefs.dockBgOpacity
                 ),
                 SurfaceId.FOLDER to resolved(
                     SurfaceId.FOLDER, folderLegacy, themeText, null

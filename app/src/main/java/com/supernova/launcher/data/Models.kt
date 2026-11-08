@@ -163,6 +163,8 @@ data class LauncherPrefs(
     val dockPages: Int = 1,
     val dockBgStyle: String = "PILL",
     val dockBgOpacity: Float = 0.5f,
+    val dockBgBlur: Int = 0,
+    val dockBgLight: Boolean = false,
     // Dock background runs flush to the window's bottom edge (no side or
     // bottom margins, square bottom corners), meeting the transparent nav
     // bar the way a draw-behind-navigation option reads. The window
@@ -227,6 +229,8 @@ data class LauncherPrefs(
     // by default.
     val drawerMatchDesktop: Boolean = true,
     val drawerBgOpacity: Float = 0.5f,
+    val drawerBgBlur: Int = 0,
+    val drawerBgLight: Boolean = false,
     // On by default.
     val drawerFastScroller: Boolean = true,
     // Overscrolling past the bottom of the drawer list opens global search.

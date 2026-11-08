@@ -806,6 +806,10 @@ class LauncherViewModel(
 
     fun setDockBgOpacity(value: Float) = persist { preferences.setDockBgOpacity(value) }
 
+    fun setDockBgBlur(value: Int) = persist { preferences.setDockBgBlur(value) }
+
+    fun setDockBgLight(value: Boolean) = persist { preferences.setDockBgLight(value) }
+
     fun setDockBgBehindNav(value: Boolean) = persist { preferences.setDockBgBehindNav(value) }
 
     fun setSearchQueryShortcuts(value: Boolean) = persist { preferences.setSearchQueryShortcuts(value) }
@@ -867,6 +871,10 @@ class LauncherViewModel(
     fun setDrawerMatchDesktop(value: Boolean) = persist { preferences.setDrawerMatchDesktop(value) }
 
     fun setDrawerBgOpacity(value: Float) = persist { preferences.setDrawerBgOpacity(value) }
+
+    fun setDrawerBgBlur(value: Int) = persist { preferences.setDrawerBgBlur(value) }
+
+    fun setDrawerBgLight(value: Boolean) = persist { preferences.setDrawerBgLight(value) }
 
     fun setDrawerFastScroller(value: Boolean) = persist { preferences.setDrawerFastScroller(value) }
 

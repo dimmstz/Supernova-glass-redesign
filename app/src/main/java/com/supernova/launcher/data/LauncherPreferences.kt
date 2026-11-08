@@ -56,6 +56,8 @@ class LauncherPreferences(private val context: Context) {
             target[StoreKeys.dockPages] = prefs.dockPages.coerceIn(1, 3)
             target[StoreKeys.dockBgStyle] = prefs.dockBgStyle
             target[StoreKeys.dockBgOpacity] = prefs.dockBgOpacity.coerceIn(0f, 1f)
+            target[StoreKeys.dockBgBlur] = prefs.dockBgBlur.coerceIn(0, 100)
+            target[StoreKeys.dockBgLight] = prefs.dockBgLight
             target[StoreKeys.dockBgBehindNav] = prefs.dockBgBehindNav
             target[StoreKeys.dockBgPadding] = prefs.dockBgPadding
             target[StoreKeys.dockLabels] = prefs.dockLabels
@@ -91,6 +93,8 @@ class LauncherPreferences(private val context: Context) {
             target[StoreKeys.drawerIconScale] = prefs.drawerIconScale.coerceIn(0.7f, 2f)
             target[StoreKeys.drawerMatchDesktop] = prefs.drawerMatchDesktop
             target[StoreKeys.drawerBgOpacity] = prefs.drawerBgOpacity.coerceIn(0.2f, 1f)
+            target[StoreKeys.drawerBgBlur] = prefs.drawerBgBlur.coerceIn(0, 100)
+            target[StoreKeys.drawerBgLight] = prefs.drawerBgLight
             target[StoreKeys.drawerFastScroller] = prefs.drawerFastScroller
             target[StoreKeys.drawerPullToSearch] = prefs.drawerPullToSearch
             target[StoreKeys.drawerSwipeIndicator] = prefs.drawerSwipeIndicator
@@ -265,6 +269,8 @@ class LauncherPreferences(private val context: Context) {
             dockPages = (values[StoreKeys.dockPages] ?: 1).coerceIn(1, 3),
             dockBgStyle = values[StoreKeys.dockBgStyle] ?: "PILL",
             dockBgOpacity = (values[StoreKeys.dockBgOpacity] ?: 0.5f).coerceIn(0f, 1f),
+            dockBgBlur = (values[StoreKeys.dockBgBlur] ?: 0).coerceIn(0, 100),
+            dockBgLight = values[StoreKeys.dockBgLight] ?: false,
             dockBgBehindNav = values[StoreKeys.dockBgBehindNav] ?: false,
             dockBgPadding = values[StoreKeys.dockBgPadding] ?: false,
             dockLabels = values[StoreKeys.dockLabels] ?: false,
@@ -300,6 +306,8 @@ class LauncherPreferences(private val context: Context) {
             drawerIconScale = (values[StoreKeys.drawerIconScale] ?: 1f).coerceIn(0.7f, 2f),
             drawerMatchDesktop = values[StoreKeys.drawerMatchDesktop] ?: true,
             drawerBgOpacity = (values[StoreKeys.drawerBgOpacity] ?: 0.5f).coerceIn(0.2f, 1f),
+            drawerBgBlur = (values[StoreKeys.drawerBgBlur] ?: 0).coerceIn(0, 100),
+            drawerBgLight = values[StoreKeys.drawerBgLight] ?: false,
             drawerFastScroller = values[StoreKeys.drawerFastScroller] ?: true,
             drawerPullToSearch = values[StoreKeys.drawerPullToSearch] ?: false,
             drawerSwipeIndicator = values[StoreKeys.drawerSwipeIndicator] ?: false,
@@ -527,6 +535,10 @@ class LauncherPreferences(private val context: Context) {
 
     suspend fun setDockBgOpacity(value: Float) = put(StoreKeys.dockBgOpacity, value.coerceIn(0f, 1f))
 
+    suspend fun setDockBgBlur(value: Int) = put(StoreKeys.dockBgBlur, value.coerceIn(0, 100))
+
+    suspend fun setDockBgLight(value: Boolean) = put(StoreKeys.dockBgLight, value)
+
     suspend fun setDockBgBehindNav(value: Boolean) = put(StoreKeys.dockBgBehindNav, value)
 
     suspend fun setSearchQueryShortcuts(value: Boolean) = put(StoreKeys.searchQueryShortcuts, value)
@@ -630,6 +642,10 @@ class LauncherPreferences(private val context: Context) {
     suspend fun setDrawerMatchDesktop(value: Boolean) = put(StoreKeys.drawerMatchDesktop, value)
 
     suspend fun setDrawerBgOpacity(value: Float) = put(StoreKeys.drawerBgOpacity, value.coerceIn(0.2f, 1f))
+
+    suspend fun setDrawerBgBlur(value: Int) = put(StoreKeys.drawerBgBlur, value.coerceIn(0, 100))
+
+    suspend fun setDrawerBgLight(value: Boolean) = put(StoreKeys.drawerBgLight, value)
 
     suspend fun setDrawerFastScroller(value: Boolean) = put(StoreKeys.drawerFastScroller, value)
 

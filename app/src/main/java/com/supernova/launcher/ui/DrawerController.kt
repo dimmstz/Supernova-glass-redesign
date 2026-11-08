@@ -1503,6 +1503,7 @@ class DrawerController(
         val key = listOf(
             prefs.drawerStyle, prefs.drawerColumns, prefs.drawerRows,
             prefs.drawerBgOpacity,
+            prefs.drawerBgBlur, prefs.drawerBgLight,
             prefs.drawerFastScroller, prefs.drawerBgColor,
             prefs.styleConfig, prefs.paletteSource, prefs.paletteSeed,
             prefs.searchBarConfig, prefs.drawerTabBar, prefs.drawerTabStyle, prefs.drawerScrubberColor,

@@ -159,6 +159,8 @@
     <string name="category_finance">Finanças</string>
     <string name="drawer_icon_scale">Tamanho dos ícones da gaveta</string>
     <string name="drawer_bg_opacity">Opacidade do fundo da gaveta</string>
+    <string name="drawer_bg_blur">Desfoque do fundo da gaveta</string>
+    <string name="drawer_bg_light">Usar fundo claro na gaveta</string>
     <string name="drawer_fast_scroller">Rolagem rápida</string>
     <string name="drawer_labels">Nomes dos ícones da gaveta</string>
     <string name="drawer_sort">Ordem de classificação</string>
@@ -475,6 +477,8 @@
     <string name="dock_pages">Páginas do dock</string>
     <string name="dock_bg_style">Plano de fundo do dock</string>
     <string name="dock_bg_opacity">Opacidade do plano de fundo do dock</string>
+    <string name="dock_bg_blur">Desfoque do plano de fundo do dock</string>
+    <string name="dock_bg_light">Usar fundo claro no dock</string>
     <string name="dock_labels">Rótulos dos ícones do dock</string>
     <string name="dock_icon_scale">Escala dos ícones do dock</string>
     <string name="dock_bg_none">Nenhum</string>

@@ -1274,6 +1274,7 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         // is also triggered directly from openDrawer for immediacy.
         drawer.onOpenStateChanged = { open ->
             animateWallpaperZoom(if (open) 1f else 0f)
+            applySurfaceBlur(viewModel.state.value.prefs, open)
         }
     }
 
@@ -1780,6 +1781,7 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
                     if (!state.loaded) return@collect
                     widgets.rebindRestoredWidgets(state.model)
                     ThemeEngine.applyMode(this@LauncherActivity, state.prefs)
+                    applySurfaceBlur(state.prefs)
                     if (state.prefs.accentColor != appliedAccent) {
                         appliedAccent = state.prefs.accentColor
                         recreate()
@@ -2203,9 +2205,19 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         applyDockChrome(viewModel.state.value.prefs)
     }
 
+    /** Uses Android's single compositor blur, keeping icons and cards sharp. */
+    private fun applySurfaceBlur(prefs: LauncherPrefs, drawerOpen: Boolean? = null) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+        val open = drawerOpen ?: (::drawer.isInitialized && drawer.isExpanded)
+        val percent = if (open) prefs.drawerBgBlur else prefs.dockBgBlur
+        val radius = if (percent <= 0) 0 else (percent * 0.8f).toInt().coerceIn(1, 80)
+        window.setBackgroundBlurRadius(radius)
+    }
+
     private fun applyDockChrome(prefs: LauncherPrefs) {
         val key = listOf(
             prefs.dockEnabled, prefs.dockBgStyle, prefs.dockBgOpacity,
+            prefs.dockBgBlur, prefs.dockBgLight,
             prefs.dockOverlay, prefs.showScrims,
             prefs.styleConfig, prefs.paletteSource, prefs.paletteSeed,
             prefs.searchBarConfig, prefs.searchBarWidgetId,

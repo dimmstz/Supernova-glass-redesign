@@ -160,6 +160,8 @@
     <string name="category_finance">Finance</string>
     <string name="drawer_icon_scale">Drawer icon scale</string>
     <string name="drawer_bg_opacity">Drawer background opacity</string>
+    <string name="drawer_bg_blur">Drawer background blur</string>
+    <string name="drawer_bg_light">Use light drawer background</string>
     <string name="drawer_fast_scroller">Fast scroller</string>
     <string name="drawer_labels">Drawer icon labels</string>
     <string name="drawer_sort">Sort order</string>
@@ -482,6 +484,8 @@
     <string name="dock_pages">Dock pages</string>
     <string name="dock_bg_style">Dock background</string>
     <string name="dock_bg_opacity">Dock background opacity</string>
+    <string name="dock_bg_blur">Dock background blur</string>
+    <string name="dock_bg_light">Use light dock background</string>
     <string name="dock_labels">Dock icon labels</string>
     <string name="dock_icon_scale">Dock icon scale</string>
     <string name="dock_bg_none">None</string>
