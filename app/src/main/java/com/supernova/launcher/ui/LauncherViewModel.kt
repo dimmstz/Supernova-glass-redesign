@@ -250,7 +250,10 @@ class LauncherViewModel(
         // this first pass only covers a store that has none yet.
         viewModelScope.launch {
             val ready = state.first { it.loaded && it.apps.isNotEmpty() }
-            if (ready.prefs.smartFolders && drawerGroups().none { it.smart }) regenerateSmartFolders()
+            // Reconcile once on every launch so taxonomy improvements and new
+            // package rules reach existing installs too. replaceSmartGroups
+            // preserves manual groups and dismissed smart categories.
+            if (ready.prefs.smartFolders) regenerateSmartFolders()
         }
         viewModelScope.launch {
             repository.modelFlow.map { it.appOverrides }.distinctUntilChanged().collect { overrides ->
