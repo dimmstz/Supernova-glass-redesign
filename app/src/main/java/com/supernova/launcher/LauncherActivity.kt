@@ -222,6 +222,8 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
     // count, the pager goes to `page`, where what was in view now is.
     private class PageAfterRemoval(val pageCount: Int, val page: Int)
     private var pendingPageAfterRemoval: PageAfterRemoval? = null
+    private var blurredWallpaper: Bitmap? = null
+    private var blurredWallpaperPercent = -1
     // A removal's Undo is waiting: empty pages stay until it goes, so the
     // item it would put back still has its page to go back to.
     private var undoSnackbar: Snackbar? = null
@@ -759,6 +761,11 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
     private val wallpaperColorsListener =
         WallpaperManager.OnColorsChangedListener { _, which ->
             if (which and WallpaperManager.FLAG_SYSTEM != 0) {
+                binding.drawerBlurBackdrop.setImageDrawable(null)
+                binding.dockBlurBackdrop.setImageDrawable(null)
+                blurredWallpaper?.recycle()
+                blurredWallpaper = null
+                blurredWallpaperPercent = -1
                 com.supernova.launcher.ui.theme.Styles.onWallpaperChanged()
                 appliedDockChrome = null
                 // Palette-derived colors moved under everything the dock
@@ -2205,14 +2212,54 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         applyDockChrome(viewModel.state.value.prefs)
     }
 
-    /** Uses Android's single compositor blur, keeping icons and cards sharp. */
+    /** Paints a real blurred wallpaper backdrop behind each surface. */
     private fun applySurfaceBlur(prefs: LauncherPrefs, drawerOpen: Boolean? = null) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
         val open = drawerOpen ?: (::drawer.isInitialized && drawer.isExpanded)
         val percent = if (open) prefs.drawerBgBlur else prefs.dockBgBlur
-        val radius = if (percent <= 0) 0 else (percent * 0.8f).toInt().coerceIn(1, 80)
-        window.setBackgroundBlurRadius(radius)
+        val active = percent > 0
+        if (active && blurredWallpaperPercent != percent) {
+            binding.drawerBlurBackdrop.setImageDrawable(null)
+            binding.dockBlurBackdrop.setImageDrawable(null)
+            blurredWallpaper?.recycle()
+            blurredWallpaper = createBlurredWallpaper(percent)
+            blurredWallpaperPercent = percent
+        }
+        val bitmap = blurredWallpaper
+        binding.drawerBlurBackdrop.setImageBitmap(bitmap)
+        binding.dockBlurBackdrop.setImageBitmap(bitmap)
+        binding.drawerBlurBackdrop.visibility = if (open && active && bitmap != null) View.VISIBLE else View.GONE
+        binding.dockBlurBackdrop.visibility = if (!open && active && bitmap != null && prefs.dockEnabled) View.VISIBLE else View.GONE
+        if (!open) {
+            binding.root.post {
+                val top = (binding.dockBar.top - dp(10)).coerceAtLeast(0)
+                val bottom = binding.dockBar.bottom.coerceAtMost(binding.root.height)
+                binding.dockBlurBackdrop.clipBounds = Rect(0, top, binding.root.width, bottom)
+            }
+        }
+        // Keep the platform blur as a best-effort enhancement on Android 12+;
+        // the bitmap backdrop above is the reliable visible implementation.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val radius = if (active) (percent * 0.8f).toInt().coerceIn(1, 80) else 0
+            window.setBackgroundBlurRadius(radius)
+        }
     }
+
+    private fun createBlurredWallpaper(percent: Int): Bitmap? = runCatching {
+        val width = binding.root.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
+        val height = binding.root.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels
+        val source = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val drawable = WallpaperManager.getInstance(this).drawable ?: return@runCatching null
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(android.graphics.Canvas(source))
+        // Downsample and smoothly upscale: this is a cheap, deterministic box
+        // blur that works on older Android versions and never blurs the UI.
+        val divisor = (18 - percent * 0.14f).roundToInt().coerceIn(2, 18)
+        val small = Bitmap.createScaledBitmap(source, (width / divisor).coerceAtLeast(1), (height / divisor).coerceAtLeast(1), true)
+        val result = Bitmap.createScaledBitmap(small, width, height, true)
+        small.recycle()
+        source.recycle()
+        result
+    }.getOrNull()
 
     private fun applyDockChrome(prefs: LauncherPrefs) {
         val key = listOf(

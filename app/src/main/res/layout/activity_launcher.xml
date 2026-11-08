@@ -31,6 +31,14 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="94dp" />
 
+    <ImageView
+        android:id="@+id/dockBlurBackdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+
     <!-- Height is wrap_content, not a constant: an icon column is an icon box
          at the dock's scale plus however many label lines it needs, and a
          fixed height clipped both. setupDock reads the laid-out height back,
@@ -91,6 +99,14 @@
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/drawerBlurBackdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
         android:visibility="gone" />
 
     <!-- Dims the wallpaper in step with the drawer coming up (the scrim
