@@ -1,18 +1,24 @@
 package com.supernova.launcher.onboarding
 
 import android.content.Context
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Telephony
+import com.supernova.launcher.R
 import com.supernova.launcher.data.AppCatalog
 import com.supernova.launcher.data.ContainerType
 import com.supernova.launcher.data.DeviceProfile
 import com.supernova.launcher.data.ItemType
 import com.supernova.launcher.data.LaunchableApp
 import com.supernova.launcher.data.LauncherItem
+import com.supernova.launcher.widget.CacheCleanerWidgetProvider
+import com.supernova.launcher.widget.RamWidgetProvider
+import com.supernova.launcher.widget.StorageWidgetProvider
+import com.supernova.launcher.widget.WeatherClockWidgetProvider
 import java.util.UUID
 
 // Builds the home screen a fresh install starts with, from its recipes
@@ -130,7 +136,7 @@ object DefaultLayoutBuilder {
             Place(slot.cell, slot.sources.asSequence().map(::resolve))
         }
         var rank = 0
-        return arrange(places, cols, rows, dockCount).mapNotNull { seat ->
+        val appItems = arrange(places, cols, rows, dockCount).mapNotNull { seat ->
             val app = apps[seat.packageName] ?: return@mapNotNull null
             LauncherItem(
                 id = UUID.randomUUID().toString(),
@@ -145,6 +151,32 @@ object DefaultLayoutBuilder {
                 userSerial = app.userSerial
             )
         }
+        // The first-run 6x4 layout has two clear rows above the app row. Keep
+        // these built-in widgets as ordinary hostable items so users can move,
+        // resize, remove or restore them exactly like any Android widget.
+        if (cols >= 6 && rows >= 2) {
+            val builtIns = listOf(
+                Triple(0, 0, WeatherClockWidgetProvider::class.java) to R.string.widget_weather_title,
+                Triple(3, 0, RamWidgetProvider::class.java) to R.string.widget_ram_title,
+                Triple(0, 1, StorageWidgetProvider::class.java) to R.string.widget_storage_title,
+                Triple(3, 1, CacheCleanerWidgetProvider::class.java) to R.string.widget_cache_title
+            )
+            return appItems + builtIns.map { (slot, labelRes) ->
+                LauncherItem(
+                    id = UUID.randomUUID().toString(),
+                    itemType = ItemType.WIDGET,
+                    container = ContainerType.WORKSPACE,
+                    page = 0,
+                    cellX = slot.first,
+                    cellY = slot.second,
+                    spanX = 3,
+                    spanY = 1,
+                    label = context.getString(labelRes),
+                    widgetProvider = ComponentName(context, slot.third).flattenToString()
+                )
+            }
+        }
+        return appItems
     }
 
     // Who sits where, apart from the resolving: each place takes the first

@@ -145,6 +145,55 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
+        <receiver
+            android:name=".widget.WeatherClockWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_weather_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_weather_clock_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.RamWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_ram_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_ram_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.StorageWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_storage_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_storage_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.CacheCleanerWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_cache_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dimm.lumilite.action.CLEAN_CACHE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_cache_cleaner_info" />
+        </receiver>
+
         <!-- configChanges: rotation and window resizes are handled in place
              by onConfigurationChanged. A launcher that is torn down and
              rebuilt on every rotation re-queries the app list, re-creates
