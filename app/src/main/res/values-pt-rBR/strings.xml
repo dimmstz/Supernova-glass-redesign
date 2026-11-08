@@ -34,6 +34,15 @@
     <string name="pin_widget_title">Adicionar o widget “%1$s” à tela inicial?</string>
     <string name="widget_picker_empty">Nenhum widget disponível</string>
     <string name="home_action_wallpaper">Papéis de parede</string>
+    <string name="wallpaper_lumi_collection">Coleção Lumi Lite</string>
+    <string name="wallpaper_desert">Monólito do deserto</string>
+    <string name="wallpaper_arctic">Aurora ártica</string>
+    <string name="wallpaper_field">Campo de lavanda</string>
+    <string name="wallpaper_forest">Floresta bioluminescente</string>
+    <string name="wallpaper_ocean">Oceano profundo</string>
+    <string name="wallpaper_apply">Aplicar papel de parede</string>
+    <string name="wallpaper_applied">Papel de parede aplicado</string>
+    <string name="wallpaper_apply_failed">Não foi possível aplicar este papel de parede</string>
     <string name="wallpaper_apps">Apps de papel de parede</string>
     <string name="wallpaper_from_files">Imagem dos arquivos</string>
     <string name="home_action_settings">Configurações</string>

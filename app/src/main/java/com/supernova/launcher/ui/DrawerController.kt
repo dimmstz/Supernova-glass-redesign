@@ -42,6 +42,9 @@ class DrawerController(
     // uses, so a drawer search and a global one end up in the same place.
     private val onChipSearch: (com.supernova.launcher.search.SearchChip, String) -> Unit,
     private val onGlobalSearch: () -> Unit,
+    // Opens the canonical Settings > App drawer > Drawer groups card so the
+    // quick drawer shortcut never diverges from the full settings editor.
+    private val onManageGroups: () -> Unit,
     // FOLDER-type groups: icon composition and tap handling live in the
     // activity, which owns FolderPopup and the icon pipeline.
     private val buildFolderIcon: (DrawerGroup, List<LaunchableApp>) -> Drawable,
@@ -1449,7 +1452,7 @@ class DrawerController(
             .setTitle(R.string.drawer_group_options_title)
             .setView(content)
             .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(R.string.drawer_manage_groups) { _, _ -> showManageGroupsCard() }
+            .setPositiveButton(R.string.drawer_manage_groups) { _, _ -> onManageGroups() }
             .show()
     }
 

@@ -1234,6 +1234,13 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
                 hideDrawer()
                 search.open()
             },
+            onManageGroups = {
+                hideDrawer()
+                startActivity(
+                    Intent(this@LauncherActivity, SettingsActivity::class.java)
+                        .putExtra(SettingsActivity.EXTRA_OPEN_DRAWER_GROUPS, true)
+                )
+            },
             buildFolderIcon = ::drawerFolderIcon,
             decorateFolderIcon = ::withFolderBadge,
             onFolderClick = { view, group, members -> showDrawerFolderPopup(view, group, members) },
@@ -4371,17 +4378,53 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         }
     }
 
-    // Wallpapers: the installed wallpaper apps, or an image from any folder.
+    // Wallpapers: the Lumi Lite collection, installed wallpaper apps, or an
+    // image from any folder.
     private fun showWallpaperSources() {
-        val sources = arrayOf(getString(R.string.wallpaper_apps), getString(R.string.wallpaper_from_files))
+        val sources = arrayOf(
+            getString(R.string.wallpaper_lumi_collection),
+            getString(R.string.wallpaper_apps),
+            getString(R.string.wallpaper_from_files)
+        )
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.home_action_wallpaper)
             .setItems(sources) { _, which ->
-                if (which == 0) {
-                    runCatching { startActivity(Intent(Intent.ACTION_SET_WALLPAPER)) }
-                } else {
-                    runCatching { pickWallpaperFileLauncher.launch(arrayOf("image/*")) }
+                when (which) {
+                    0 -> showBundledWallpapers()
+                    1 -> runCatching { startActivity(Intent(Intent.ACTION_SET_WALLPAPER)) }
+                    else -> runCatching { pickWallpaperFileLauncher.launch(arrayOf("image/*")) }
                         .onFailure { Toast.makeText(this, R.string.launch_failed, Toast.LENGTH_SHORT).show() }
+                }
+            }
+            .show()
+    }
+
+    private fun showBundledWallpapers() {
+        val wallpapers = listOf(
+            R.string.wallpaper_desert to R.drawable.wallpaper_deserto,
+            R.string.wallpaper_arctic to R.drawable.wallpaper_artico,
+            R.string.wallpaper_field to R.drawable.wallpaper_campo,
+            R.string.wallpaper_forest to R.drawable.wallpaper_floresta,
+            R.string.wallpaper_ocean to R.drawable.wallpaper_oceano
+        )
+        var selected = 0
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.wallpaper_lumi_collection)
+            .setSingleChoiceItems(
+                wallpapers.map { getString(it.first) }.toTypedArray(),
+                selected
+            ) { _, which -> selected = which }
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.wallpaper_apply) { _, _ ->
+                val resource = wallpapers[selected].second
+                runCatching {
+                    WallpaperManager.getInstance(this).setStream(
+                        resources.openRawResource(resource).use { it }
+                    )
+                }.onSuccess {
+                    Toast.makeText(this, R.string.wallpaper_applied, Toast.LENGTH_SHORT).show()
+                }.onFailure {
+                    Toast.makeText(this, R.string.wallpaper_apply_failed, Toast.LENGTH_LONG).show()
                 }
             }
             .show()

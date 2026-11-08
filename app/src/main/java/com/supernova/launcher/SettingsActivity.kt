@@ -78,6 +78,10 @@ import kotlin.math.abs
 
 class SettingsActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_OPEN_DRAWER_GROUPS = "open_drawer_groups"
+    }
+
     private enum class Tab { SETTINGS, STYLE }
 
     private lateinit var binding: ActivitySettingsBinding
@@ -629,6 +633,9 @@ class SettingsActivity : AppCompatActivity() {
         // A recreate keeps the intent it was opened with, deep link and all,
         // but it has moved on from there: it restores its own page instead.
         if (savedInstanceState == null) handleDeepLink(intent)
+        if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_OPEN_DRAWER_GROUPS, false)) {
+            binding.root.post { showDrawerGroups() }
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

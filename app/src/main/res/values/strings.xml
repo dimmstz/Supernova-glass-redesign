@@ -35,6 +35,15 @@
     <string name="pin_widget_title">Add “%1$s” widget to Home?</string>
     <string name="widget_picker_empty">No widgets available</string>
     <string name="home_action_wallpaper">Wallpapers</string>
+    <string name="wallpaper_lumi_collection">Lumi Lite collection</string>
+    <string name="wallpaper_desert">Desert monolith</string>
+    <string name="wallpaper_arctic">Arctic aurora</string>
+    <string name="wallpaper_field">Lavender field</string>
+    <string name="wallpaper_forest">Bioluminescent forest</string>
+    <string name="wallpaper_ocean">Deep ocean</string>
+    <string name="wallpaper_apply">Apply wallpaper</string>
+    <string name="wallpaper_applied">Wallpaper applied</string>
+    <string name="wallpaper_apply_failed">Couldn’t apply this wallpaper</string>
     <string name="wallpaper_apps">Wallpaper apps</string>
     <string name="wallpaper_from_files">Image from files</string>
     <string name="home_action_settings">Settings</string>
