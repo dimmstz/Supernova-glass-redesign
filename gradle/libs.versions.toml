@@ -16,7 +16,6 @@ serialization = "1.11.0"
 activity = "1.13.0"
 fragment = "1.9.1"
 junit = "4.13.2"
-leakcanary = "2.14"
 detekt = "1.23.8"
 baselineprofile = "1.5.0"
 benchmark = "1.5.0"
@@ -42,7 +41,6 @@ serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 junit = { module = "junit:junit", version.ref = "junit" }
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
 androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark" }
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }

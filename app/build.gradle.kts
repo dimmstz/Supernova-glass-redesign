@@ -146,9 +146,6 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     baselineProfile(project(":baselineprofile"))
 
-    // Debug builds only: watches for leaked activities, views and view models.
-    debugImplementation(libs.leakcanary)
-
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.kotlin.test.junit)
