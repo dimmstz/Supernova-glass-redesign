@@ -174,7 +174,7 @@ data class LauncherPrefs(
     // the screen edges; off, it spans the full width and sits flush on the
     // navigation bar (square bottom corners), without reaching under it -
     // that is what dockBgBehindNav adds on top. Off by default.
-    val dockBgPadding: Boolean = false,
+    val dockBgPadding: Boolean = true,
     // Off by default: dock icons go unlabelled.
     val dockLabels: Boolean = false,
     val dockIconScale: Float = 1f,
@@ -229,7 +229,9 @@ data class LauncherPrefs(
     // by default.
     val drawerMatchDesktop: Boolean = true,
     val drawerBgOpacity: Float = 0.5f,
-    val drawerBgBlur: Int = 0,
+    // A moderate blur is enabled from the first launch; the settings slider
+    // remains available for a fully clear or more frosted drawer.
+    val drawerBgBlur: Int = 55,
     val drawerBgLight: Boolean = false,
     // On by default.
     val drawerFastScroller: Boolean = true,

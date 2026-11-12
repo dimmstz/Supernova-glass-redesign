@@ -1574,10 +1574,12 @@ class DrawerController(
                 (0x5A shl 24) or (resolvedField.text and 0xFFFFFF)
             )
         }
-        // The magnifier on the left is fixed, in the drawer's text colour.
+        // The magnifier and its settings shortcut are always the same white.
         binding.drawerSearchIcon.visibility = View.VISIBLE
         binding.drawerSearchIcon.setImageResource(R.drawable.ic_search)
-        binding.drawerSearchIcon.imageTintList = android.content.res.ColorStateList.valueOf(resolvedField.text)
+        val drawerUtilityIconColor = android.content.res.ColorStateList.valueOf(android.graphics.Color.WHITE)
+        binding.drawerSearchIcon.imageTintList = drawerUtilityIconColor
+        binding.drawerSettingsButton.imageTintList = drawerUtilityIconColor
         // The field isn't on a Material card, so its text follows its own style.
         binding.drawerSearch.setTextColor(resolvedField.text)
         binding.drawerSearchGhost.setTextColor((0x80 shl 24) or (resolvedField.text and 0xFFFFFF))

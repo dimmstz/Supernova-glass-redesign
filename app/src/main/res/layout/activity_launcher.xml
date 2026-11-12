@@ -221,7 +221,7 @@
                 android:contentDescription="@string/lumi_settings_shortcut"
                 android:padding="10dp"
                 android:src="@drawable/ic_tab_settings"
-                android:tint="@color/lumiAccentBlue" />
+                android:tint="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout

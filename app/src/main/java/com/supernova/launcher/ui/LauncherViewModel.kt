@@ -1640,22 +1640,20 @@ class LauncherViewModel(
         if (prefs.smartFolders) regenerateSmartFolders(freshInstall = true)
     }
 
-    // The default home-screen bar: the pill under the dock
-    // icons, in the fresh style (DesktopSearchBarConfig.FRESH). Never touches a
-    // bar the user has already placed. Reads the store rather than the state
+    // The factory default has no home-screen search bar. Never touches a bar
+    // the user has already placed. Reads the store rather than the state
     // snapshot, which may not have loaded yet on the wizard's first frame.
     suspend fun placeDefaultSearchBar() {
         val config = SearchBarConfig.decode(preferences.snapshot().searchBarConfig)
         if (SearchBarPlacement.fromName(config.desktop.placement) != SearchBarPlacement.NONE) return
-        preferences.setSearchBarConfig(config.copy(desktop = DesktopSearchBarConfig.FRESH).encode())
+        preferences.setSearchBarConfig(config.copy(desktop = DesktopSearchBarConfig()).encode())
     }
 
-    // Back to what a fresh install on this screen starts with: its grid and
-    // the default search bar, over an empty home screen.
+    // Back to the fresh grid and dock defaults over an empty home screen.
     suspend fun resetToDefaults() = repository.resetToDefaults(
         preferences.snapshot(),
         DeviceProfile.forDevice(getApplication()).applyTo(LauncherPrefs()).copy(
-            searchBarConfig = SearchBarConfig(desktop = DesktopSearchBarConfig.FRESH).encode()
+            searchBarConfig = SearchBarConfig().encode()
         )
     )
 
