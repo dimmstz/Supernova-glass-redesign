@@ -309,7 +309,7 @@ class LauncherPreferences(private val context: Context) {
             drawerRememberPosition = values[StoreKeys.drawerRememberPosition] ?: false,
             drawerAutoClose = values[StoreKeys.drawerAutoClose] ?: false,
             drawerFoldersFirst = values[StoreKeys.drawerFoldersFirst] ?: true,
-            smartFolders = values[StoreKeys.smartFolders] ?: false,
+            smartFolders = values[StoreKeys.smartFolders] ?: true,
             smartGroupMode = values[StoreKeys.smartGroupMode] ?: "TABS",
             smartFoldersDismissed = values[StoreKeys.smartFoldersDismissed] ?: emptySet(),
             drawerIconScale = (values[StoreKeys.drawerIconScale] ?: 1f).coerceIn(0.7f, 2f),

@@ -158,6 +158,7 @@
     <string name="category_productivity">Produtividade</string>
     <string name="category_finance">Finanças</string>
     <string name="category_shopping">Compras</string>
+    <string name="category_other">Outros</string>
     <string name="drawer_icon_scale">Tamanho dos ícones da gaveta</string>
     <string name="drawer_bg_opacity">Opacidade do fundo da gaveta</string>
     <string name="drawer_bg_blur">Desfoque do fundo da gaveta</string>

@@ -14,7 +14,8 @@ enum class SmartCategory {
     MAPS,
     PRODUCTIVITY,
     FINANCE,
-    SHOPPING
+    SHOPPING,
+    OTHER
 }
 
 // Resolves an app to a Smart Folder category: the curated package-prefix map
@@ -145,16 +146,19 @@ object AppCategories {
         if (system != null) return system
         val text = label.lowercase()
         return when {
-            listOf("jogo", "game", "games").any(text::contains) -> SmartCategory.GAMES
+            listOf("jogo", "game", "games", "rpg", "puzzle", "arcade", "chess", "soccer", "football").any(text::contains) -> SmartCategory.GAMES
             listOf("banco", "bank", "finan", "pagamento", "wallet", "carteira").any(text::contains) -> SmartCategory.FINANCE
             listOf("compras", "shopping", "loja", "store", "mercado", "delivery").any(text::contains) -> SmartCategory.SHOPPING
-            listOf("chat", "mensag", "social", "comunidade").any(text::contains) -> SmartCategory.SOCIAL
-            listOf("foto", "photo", "camera", "galeria", "gallery").any(text::contains) -> SmartCategory.IMAGE
+            listOf("chat", "mensag", "social", "comunidade", "forum", "community").any(text::contains) -> SmartCategory.SOCIAL
+            listOf("foto", "photo", "camera", "câmera", "galeria", "gallery", "image", "eraser", "editor", "canva", "capcut").any(text::contains) -> SmartCategory.IMAGE
             listOf("mapa", "map", "gps", "viagem", "transporte", "taxi").any(text::contains) -> SmartCategory.MAPS
-            listOf("notas", "notes", "calend", "email", "e-mail", "document", "office", "tarefa").any(text::contains) -> SmartCategory.PRODUCTIVITY
+            listOf("notas", "notes", "calend", "email", "e-mail", "document", "office", "tarefa", "authenticator", "authentication", "senha", "password", "calculator", "calculadora", "base44", "browser", "navegador", "files", "arquivo", "drive").any(text::contains) -> SmartCategory.PRODUCTIVITY
             listOf("notícia", "noticia", "news", "jornal").any(text::contains) -> SmartCategory.NEWS
             listOf("music", "música", "video", "vídeo", "stream", "filme", "tv").any(text::contains) -> SmartCategory.ENTERTAINMENT
-            else -> null
+            // Do not silently leave an app outside smart organization. The
+            // fallback is intentionally explicit so users can still find
+            // unknown or regional apps in one useful category.
+            else -> SmartCategory.OTHER
         }
     }
 }

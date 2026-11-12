@@ -159,6 +159,7 @@
     <string name="category_productivity">Productivity</string>
     <string name="category_finance">Finance</string>
     <string name="category_shopping">Shopping</string>
+    <string name="category_other">Other</string>
     <string name="drawer_icon_scale">Drawer icon scale</string>
     <string name="drawer_bg_opacity">Drawer background opacity</string>
     <string name="drawer_bg_blur">Drawer background blur</string>

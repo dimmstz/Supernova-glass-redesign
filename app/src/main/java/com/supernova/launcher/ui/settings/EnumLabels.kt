@@ -242,6 +242,7 @@ object EnumLabels {
         SmartCategory.PRODUCTIVITY -> R.string.category_productivity
         SmartCategory.FINANCE -> R.string.category_finance
         SmartCategory.SHOPPING -> R.string.category_shopping
+        SmartCategory.OTHER -> R.string.category_other
     }
 
     @StringRes

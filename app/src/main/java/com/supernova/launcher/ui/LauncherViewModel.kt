@@ -1551,9 +1551,13 @@ class LauncherViewModel(
                 com.supernova.launcher.data.SmartCategory.ENTERTAINMENT,
                 com.supernova.launcher.data.SmartCategory.MAPS,
                 com.supernova.launcher.data.SmartCategory.IMAGE,
-                com.supernova.launcher.data.SmartCategory.NEWS
+                com.supernova.launcher.data.SmartCategory.NEWS,
+                com.supernova.launcher.data.SmartCategory.OTHER
             )
-            byCategory.filterValues { it.size >= SMART_FOLDER_MIN_APPS }
+            byCategory.filter { (category, members) ->
+                category == com.supernova.launcher.data.SmartCategory.OTHER ||
+                    members.size >= SMART_FOLDER_MIN_APPS
+            }
                 .toList()
                 .sortedBy { categoryOrder.indexOf(it.first).takeIf { index -> index >= 0 } ?: Int.MAX_VALUE }
                 .mapIndexed { index, (category, members) ->
@@ -1571,8 +1575,10 @@ class LauncherViewModel(
                 )
             }
         }
+        val otherName = getApplication<Application>()
+            .getString(com.supernova.launcher.ui.settings.EnumLabels.of(com.supernova.launcher.data.SmartCategory.OTHER))
         val (kept, tooBig) = generated.partition {
-            !freshInstall || it.members.size <= SMART_FOLDER_FRESH_INSTALL_MAX_APPS
+            !freshInstall || it.name == otherName || it.members.size <= SMART_FOLDER_FRESH_INSTALL_MAX_APPS
         }
         // The store drops the dismissed names itself, in the same edit.
         preferences.replaceSmartGroups(kept, dismiss = tooBig.mapTo(mutableSetOf()) { it.name })
