@@ -13,7 +13,7 @@ Lumi Lite is an open-source Android launcher focused on deep customization, gest
 - [Latest APK release](https://github.com/dimmstz/Supernova-glass-redesign/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.3.11`. The app includes a complete Brazilian Portuguese (`pt-BR`) localization, a graphite monochrome dark settings theme inspired by the Lumi Lite reference, the official Lumi Lite icon on the welcome screen, updated first-run defaults for the home screen, Dock and app drawer, smart category groups configurable as separate drawer tabs or category folders, manual drawer groups, a modern Glassmorphism weather-and-clock widget and an organized group-options card beside the drawer tabs. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
+The next release line is `v0.3.12`. The app includes a complete Brazilian Portuguese (`pt-BR`) localization, a graphite monochrome dark settings theme inspired by the Lumi Lite reference, the official Lumi Lite icon on the welcome screen, updated first-run defaults for the home screen, Dock and app drawer, smart category groups configurable as separate drawer tabs or category folders, manual drawer groups, a modern Glassmorphism weather-and-clock widget and an organized group-options card beside the drawer tabs. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
@@ -29,7 +29,7 @@ The debug APK is written to `app/build/outputs/apk/debug/`. For a release build,
 ./gradlew assembleSafeRelease
 ```
 
-Release builds use the existing `keystore.properties` configuration locally when a production signing key is available. GitHub Actions also signs the distributed CI APK with a temporary CI key and runs `apksigner verify` before publishing, so the Release asset is a valid installable APK. A production key should be configured as repository Actions secrets before distributing update-compatible builds.
+Release builds use the existing `keystore.properties` configuration locally when a production signing key is available. GitHub Actions refuses to publish a release unless the same persistent production key is supplied through `LUMI_RELEASE_KEYSTORE_BASE64`, `LUMI_RELEASE_STORE_PASSWORD`, `LUMI_RELEASE_KEY_ALIAS` and `LUMI_RELEASE_KEY_PASSWORD`. This is required because Android updates only when the package, signature and versionCode are compatible. Debug artifacts intentionally use the separate package `com.dimm.lumilite.debug` and are not update-compatible with the release package.
 
 ## Continuous integration and releases
 

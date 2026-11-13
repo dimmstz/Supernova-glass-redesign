@@ -82,6 +82,12 @@ class WidgetController(
         // does.
         runCatching { appWidgetHost.startListening() }
             .onFailure { android.util.Log.w("Supernova", "Widget host startListening failed", it) }
+        // Provider discovery and the default-home permission can settle just
+        // after onStart on Android 12+. Retry restored Lumi widgets once the
+        // host has completed its first listening round.
+        activity.window.decorView.postDelayed({
+            rebindRestoredWidgets(viewModel.state.value.model)
+        }, 700L)
     }
 
     fun stopListening() = appWidgetHost.stopListening()
@@ -744,13 +750,18 @@ class WidgetController(
         if (bound) {
             proceedToConfigure(info)
         } else {
-            bindWidgetLauncher.launch(
-                Intent(AppWidgetManager.ACTION_APPWIDGET_BIND).apply {
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, info.provider)
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER_PROFILE, info.profile)
-                }
-            )
+            runCatching {
+                bindWidgetLauncher.launch(
+                    Intent(AppWidgetManager.ACTION_APPWIDGET_BIND).apply {
+                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, info.provider)
+                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER_PROFILE, info.profile)
+                    }
+                )
+            }.onFailure {
+                abortPendingWidget()
+                Toast.makeText(activity, R.string.widget_configure_failed, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

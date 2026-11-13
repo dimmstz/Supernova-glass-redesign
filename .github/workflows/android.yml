@@ -91,31 +91,25 @@ jobs:
           LUMI_KEY_PASSWORD: ${{ secrets.LUMI_RELEASE_KEY_PASSWORD }}
         run: |
           # A new key on every run makes Android reject an update as a
-          # different app. The repository secrets are the long-lived signing
-          # identity. The fallback is kept only for repositories that have not
-          # configured the secrets yet; those APKs require a one-time uninstall.
+          # different app. Release signing must therefore use the same
+          # long-lived repository secrets on every tag.
           if [ -n "$LUMI_KEYSTORE_B64" ] && [ -n "$LUMI_STORE_PASSWORD" ] && [ -n "$LUMI_KEY_ALIAS" ] && [ -n "$LUMI_KEY_PASSWORD" ]; then
             printf '%s' "$LUMI_KEYSTORE_B64" | base64 --decode > ci-release.jks
             store_password="$LUMI_STORE_PASSWORD"
             key_alias="$LUMI_KEY_ALIAS"
             key_password="$LUMI_KEY_PASSWORD"
           else
-            echo "::warning::Persistent Lumi release signing secrets are not configured; this APK cannot update an APK signed by another key."
-            keytool -genkeypair -v \
-              -keystore ci-release.jks \
-              -alias supernova-ci \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 36500 \
-              -storepass changeit \
-              -keypass changeit \
-              -dname "CN=Lumi Launcher Lite CI, OU=Android, O=Lumi Launcher Lite, C=US"
-            store_password="changeit"
-            key_alias="supernova-ci"
-            key_password="changeit"
+            echo "::error::Persistent release signing secrets are missing. Refusing to publish an APK with a new key because it cannot update the installed Lumi Lite app."
+            exit 1
           fi
           unsigned_apk=$(find app/build/outputs/apk/safe/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
           test -n "$unsigned_apk"
+          badging=$("$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/aapt" dump badging "$unsigned_apk")
+          echo "$badging" | grep -Fq "package: name='com.dimm.lumilite'"
+          expected_version=$(sed -n 's/.*versionCode = \([0-9][0-9]*\).*/\1/p' app/build.gradle.kts | head -1)
+          expected_name=$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -1)
+          echo "$badging" | grep -Fq "versionCode='$expected_version'"
+          echo "$badging" | grep -Fq "versionName='$expected_name'"
           "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" sign \
             --ks ci-release.jks \
             --ks-key-alias "$key_alias" \
