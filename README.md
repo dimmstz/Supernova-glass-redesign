@@ -13,7 +13,7 @@ Lumi Lite is an open-source Android launcher focused on deep customization, gest
 - [Latest APK release](https://github.com/dimmstz/Supernova-glass-redesign/releases/latest)
 - Play Store: coming soon
 
-The current release line is `v0.3.9`. The app includes a complete Brazilian Portuguese (`pt-BR`) localization, a graphite monochrome dark settings theme inspired by the Lumi Lite reference, the official Lumi Lite icon on the welcome screen, updated first-run defaults for the home screen, Dock and app drawer, smart category groups configurable as separate drawer tabs or category folders, manual drawer groups and an organized group-options card beside the drawer tabs. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
+The current release line is `v0.3.10`. The app includes a complete Brazilian Portuguese (`pt-BR`) localization, a graphite monochrome dark settings theme inspired by the Lumi Lite reference, the official Lumi Lite icon on the welcome screen, updated first-run defaults for the home screen, Dock and app drawer, smart category groups configurable as separate drawer tabs or category folders, manual drawer groups and an organized group-options card beside the drawer tabs. Release APKs are built, signed and attached automatically by GitHub Actions from version tags.
 
 ## Build locally
 
