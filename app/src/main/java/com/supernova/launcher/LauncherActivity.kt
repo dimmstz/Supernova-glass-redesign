@@ -2217,7 +2217,15 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         val open = drawerOpen ?: (::drawer.isInitialized && drawer.isExpanded)
         val percent = if (open) prefs.drawerBgBlur else prefs.dockBgBlur
         val active = percent > 0
-        if (active && blurredWallpaperPercent != percent) {
+        if (!active) {
+            binding.drawerBlurBackdrop.setImageDrawable(null)
+            binding.dockBlurBackdrop.setImageDrawable(null)
+            binding.drawerBlurBackdrop.setRenderEffect(null)
+            binding.dockBlurBackdrop.setRenderEffect(null)
+            blurredWallpaper?.recycle()
+            blurredWallpaper = null
+            blurredWallpaperPercent = -1
+        } else if (blurredWallpaperPercent != percent) {
             binding.drawerBlurBackdrop.setImageDrawable(null)
             binding.dockBlurBackdrop.setImageDrawable(null)
             blurredWallpaper?.recycle()
@@ -2227,6 +2235,21 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         val bitmap = blurredWallpaper
         binding.drawerBlurBackdrop.setImageBitmap(bitmap)
         binding.dockBlurBackdrop.setImageBitmap(bitmap)
+        val strength = (percent / 100f).coerceIn(0f, 1f)
+        binding.drawerBlurBackdrop.alpha = strength
+        binding.dockBlurBackdrop.alpha = strength
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val radius = (percent * 0.9f).coerceIn(0f, 80f)
+            val effect = if (radius > 0f) {
+                android.graphics.RenderEffect.createBlurEffect(
+                    radius, radius, android.graphics.Shader.TileMode.CLAMP
+                )
+            } else {
+                null
+            }
+            binding.drawerBlurBackdrop.setRenderEffect(effect)
+            binding.dockBlurBackdrop.setRenderEffect(effect)
+        }
         binding.drawerBlurBackdrop.visibility = if (open && active && bitmap != null) View.VISIBLE else View.GONE
         binding.dockBlurBackdrop.visibility = if (!open && active && bitmap != null && prefs.dockEnabled) View.VISIBLE else View.GONE
         if (!open) {
@@ -2239,8 +2262,7 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         // Keep the platform blur as a best-effort enhancement on Android 12+;
         // the bitmap backdrop above is the reliable visible implementation.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val radius = if (active) (percent * 0.8f).toInt().coerceIn(1, 80) else 0
-            window.setBackgroundBlurRadius(radius)
+            window.setBackgroundBlurRadius(if (active) (percent * 0.8f).toInt().coerceIn(1, 80) else 0)
         }
     }
 
