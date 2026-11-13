@@ -78,7 +78,9 @@ class WeatherClockWidgetProvider : LumiInfoProvider() {
             Triple(forecastDay.format(Date(now.timeInMillis + 259_200_000L)), "☀", "$maximum° / ${minimum + 2}°")
         )
 
-        views.setTextViewText(R.id.weatherWidgetIcon, if (warm) "☀️" else "☁️")
+        // Avoid emoji variation-selector sequences: some OEM RemoteViews
+        // hosts reject them while applying the provider update.
+        views.setTextViewText(R.id.weatherWidgetIcon, if (warm) "☀" else "☁")
         views.setTextViewText(R.id.weatherWidgetTemp, "$temperature°")
         views.setTextViewText(R.id.weatherWidgetCondition, atmosphere)
         views.setTextViewText(R.id.weatherWidgetLocation, context.getString(R.string.widget_weather_location))
