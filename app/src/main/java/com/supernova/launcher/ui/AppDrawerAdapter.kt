@@ -165,15 +165,22 @@ class AppDrawerAdapter(
     // Paged mode: a page is an exact slice of items(), already ordered and
     // filtered, so it bypasses submit()/applyFilter() entirely.
     fun submitPage(items: List<Any>) {
+        if (displayItems.size == items.size && displayItems.indices.all { displayItems[it] === items[it] }) return
         displayItems.clear()
         displayItems.addAll(items)
         notifyDataSetChanged()
     }
 
     fun filter(query: String) {
-        this.query = query.trim().lowercase()
+        val next = query.trim().lowercase()
+        if (this.query == next) return
+        this.query = next
         applyFilter()
     }
+
+    // Cheap identity used by the paged drawer to skip rebinding every page
+    // when unrelated launcher state emits.
+    fun contentSignature(): String = displayItems.joinToString("|") { keyOf(it) }
 
     private fun applyFilter() {
         val oldItems = displayItems.toList()

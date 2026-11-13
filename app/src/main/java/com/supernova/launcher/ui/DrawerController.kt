@@ -426,6 +426,8 @@ class DrawerController(
         // view cache keeps flings from re-inflating rows.
         binding.drawerRecycler.itemAnimator = null
         binding.drawerRecycler.setItemViewCacheSize(24)
+        binding.drawerRecycler.setHasFixedSize(true)
+        binding.drawerRecycler.layoutManager?.isItemPrefetchEnabled = true
         binding.drawerRecycler.addOnScrollListener(newScrollKeyboardHider())
         // Pages are cut to the pager's height (syncPages), which can change
         // after the cut; posted, so the re-cut isn't made inside a layout.
@@ -436,6 +438,8 @@ class DrawerController(
                 if (currentStyle == DrawerStyle.PAGED_GRID && pageRows(prefs) != cutRows) syncPages()
             }
         }
+        binding.drawerPager.offscreenPageLimit = 1
+        binding.drawerPager.getChildAt(0)?.overScrollMode = View.OVER_SCROLL_NEVER
         // Paging is the paged style's scrolling, so it does the same.
         binding.drawerPager.registerOnPageChangeCallback(
             object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
@@ -552,8 +556,10 @@ class DrawerController(
             override fun onTabSelected(tab: TabLayout.Tab) {
                 selectedTab = tab.tag
                 submit()
-                adapter.filter(binding.drawerSearch.text?.toString().orEmpty())
-                syncPages()
+                // submit() already refreshes the active list. Avoid running
+                // the same DiffUtil pass a second time for an empty query.
+                val query = binding.drawerSearch.text?.toString().orEmpty()
+                if (query.isNotBlank()) adapter.filter(query)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
@@ -1829,6 +1835,8 @@ class DrawerController(
                 )
                 layoutManager = GridLayoutManager(parent.context, columns)
                 itemAnimator = null
+                setHasFixedSize(true)
+                setItemViewCacheSize(12)
                 isNestedScrollingEnabled = false
                 overScrollMode = View.OVER_SCROLL_NEVER
                 clipToPadding = false
@@ -1868,6 +1876,7 @@ class DrawerController(
     // The setDisplay arguments the flat adapter last got, replayed onto every
     // page adapter as it binds.
     private var lastDisplay: Triple<Float, Boolean, LauncherPrefs>? = null
+    private var syncedPagesKey: String? = null
 
     // Re-cuts the pages from the flat list. Cheap enough to call after every
     // change to that list; a no-op unless the paged style is showing.
@@ -1884,6 +1893,9 @@ class DrawerController(
         cutRows = rows
         val perPage = (rows * columns).coerceAtLeast(1)
         val pages = adapter.items().chunked(perPage)
+        val pagesKey = "${adapter.contentSignature()}|$columns|$rows|${prefs.drawerInfiniteScroll}"
+        if (pagesKey == syncedPagesKey && pager.adapter === pagerAdapter) return
+        syncedPagesKey = pagesKey
         // No matches means no pages: show the flat list so the empty state has
         // somewhere to render instead of leaving a blank pager.
         val empty = pages.isEmpty()
