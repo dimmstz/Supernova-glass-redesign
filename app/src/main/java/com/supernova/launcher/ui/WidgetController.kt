@@ -670,7 +670,12 @@ class WidgetController(
     }
 
     private fun rebindSilently(key: String, provider: String?, onBound: (Int) -> Unit) {
-        val info = if (rebindsTried.add(key)) installedProvider(provider) else null
+        if (key in rebindsTried) return
+        // Provider discovery can lag behind the first model emission, and the
+        // system can temporarily reject a bind while the launcher is becoming
+        // the active home. Do not permanently consume the retry on either
+        // transient condition.
+        val info = installedProvider(provider)
         if (info == null || needsSetup(info)) return
         val widgetId = appWidgetHost.allocateAppWidgetId()
         // Not swept away before the model has it.
@@ -678,7 +683,13 @@ class WidgetController(
         val bound = runCatching {
             appWidgetManager.bindAppWidgetIdIfAllowed(widgetId, info.profile, info.provider, null)
         }.getOrDefault(false)
-        if (bound) onBound(widgetId) else appWidgetHost.deleteAppWidgetId(widgetId)
+        if (bound) {
+            rebindsTried += key
+            onBound(widgetId)
+        } else {
+            reboundIds -= widgetId
+            appWidgetHost.deleteAppWidgetId(widgetId)
+        }
     }
 
 

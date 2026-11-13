@@ -4544,6 +4544,12 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
                 val resource = wallpapers[selected].second
                 runCatching {
                     WallpaperManager.getInstance(this).setResource(resource, WallpaperManager.FLAG_SYSTEM)
+                }.recoverCatching {
+                    resources.openRawResource(resource).use { input ->
+                        WallpaperManager.getInstance(this).setStream(
+                            input, null, true, WallpaperManager.FLAG_SYSTEM
+                        )
+                    }
                 }.onSuccess {
                     Toast.makeText(this, R.string.wallpaper_applied, Toast.LENGTH_SHORT).show()
                 }.onFailure {
@@ -4557,7 +4563,8 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
     // launcher holding SET_WALLPAPER: the system's own where there is one, as
     // another launcher can take the action too. WallpaperManager's
     // getCropAndSetWallpaperIntent finds none on One UI. Where there is no
-    // cropper at all, the apps that "Set as" an image take it.
+    // cropper at all, apply the granted document stream directly instead of
+    // handing the URI to an ACTION_ATTACH_DATA activity that may not exist.
     private fun cropAndSetWallpaper(uri: android.net.Uri) {
         val crop = Intent(android.app.WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER)
             .setDataAndType(uri, "image/*")
@@ -4569,12 +4576,17 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
             startActivity(crop.setClassName(cropper.packageName, cropper.name))
         }.isSuccess
         if (started) return
-        val setAs = Intent(Intent.ACTION_ATTACH_DATA)
-            .setDataAndType(uri, "image/*")
-            .putExtra("mimeType", "image/*")
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        runCatching { startActivity(Intent.createChooser(setAs, getString(R.string.home_action_wallpaper))) }
-            .onFailure { Toast.makeText(this, R.string.launch_failed, Toast.LENGTH_SHORT).show() }
+        runCatching {
+            contentResolver.openInputStream(uri)?.use { input ->
+                WallpaperManager.getInstance(this).setStream(
+                    input, null, true, WallpaperManager.FLAG_SYSTEM
+                )
+            } ?: error("Unable to open selected image")
+        }.onSuccess {
+            Toast.makeText(this, R.string.wallpaper_applied, Toast.LENGTH_SHORT).show()
+        }.onFailure {
+            Toast.makeText(this, R.string.wallpaper_apply_failed, Toast.LENGTH_LONG).show()
+        }
     }
 
     // Per-icon swipe: a short vertical flick on the icon runs its bound app
