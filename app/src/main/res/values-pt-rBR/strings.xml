@@ -38,6 +38,8 @@
     <string name="widget_weather_day">Dia luminoso</string>
     <string name="widget_weather_evening">Fim de tarde calmo</string>
     <string name="widget_weather_night">Noite tranquila</string>
+    <string name="widget_weather_location">Localização atual</string>
+    <string name="widget_weather_high_low">Máx. %1$d°  •  Mín. %2$d°</string>
     <string name="widget_ram_title">Memória RAM</string>
     <string name="widget_ram_detail">Total de %1$s</string>
     <string name="widget_storage_title">Armazenamento interno</string>

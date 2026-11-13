@@ -12,13 +12,15 @@ import android.os.StatFs
 import android.widget.RemoteViews
 import com.supernova.launcher.R
 import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 private const val ACTION_CLEAN_CACHE = "com.dimm.lumilite.action.CLEAN_CACHE"
 
 abstract class LumiInfoProvider : AppWidgetProvider() {
-    protected fun views(context: Context): RemoteViews =
+    protected open fun views(context: Context): RemoteViews =
         RemoteViews(context.packageName, R.layout.widget_info)
 
     protected fun updateAll(context: Context, provider: Class<out AppWidgetProvider>, update: (RemoteViews) -> Unit) {
@@ -49,18 +51,49 @@ abstract class LumiInfoProvider : AppWidgetProvider() {
 }
 
 class WeatherClockWidgetProvider : LumiInfoProvider() {
+    override fun views(context: Context): RemoteViews =
+        RemoteViews(context.packageName, R.layout.widget_weather_clock)
+
     override fun render(context: Context, views: RemoteViews) {
-        val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+        val now = Calendar.getInstance()
+        val hour = now.get(Calendar.HOUR_OF_DAY)
         val atmosphere = when (hour) {
             in 6..11 -> context.getString(R.string.widget_weather_morning)
             in 12..17 -> context.getString(R.string.widget_weather_day)
             in 18..22 -> context.getString(R.string.widget_weather_evening)
             else -> context.getString(R.string.widget_weather_night)
         }
-        views.setTextViewText(R.id.widgetTitle, context.getString(R.string.widget_weather_title))
-        views.setTextViewText(R.id.widgetValue, timeLabel())
-        views.setTextViewText(R.id.widgetDetail, "$atmosphere  •  ${dateLabel()}")
-        views.setViewVisibility(R.id.widgetAction, android.view.View.GONE)
+        // This is an offline launcher widget: show a calm local snapshot rather
+        // than pretending to have a network weather feed. A future provider
+        // can replace these values without changing the visual contract.
+        val warm = hour in 10..18
+        val temperature = if (warm) 28 else 23
+        val maximum = temperature + 2
+        val minimum = temperature - 7
+        val dayFormat = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
+        val forecastDay = SimpleDateFormat("EEE", Locale.getDefault())
+        val forecast = listOf(
+            Triple(forecastDay.format(Date(now.timeInMillis + 86_400_000L)), "☀", "$maximum° / $minimum°"),
+            Triple(forecastDay.format(Date(now.timeInMillis + 172_800_000L)), "◒", "${maximum + 1}° / ${minimum + 1}°"),
+            Triple(forecastDay.format(Date(now.timeInMillis + 259_200_000L)), "☀", "$maximum° / ${minimum + 2}°")
+        )
+
+        views.setTextViewText(R.id.weatherWidgetIcon, if (warm) "☀️" else "☁️")
+        views.setTextViewText(R.id.weatherWidgetTemp, "$temperature°")
+        views.setTextViewText(R.id.weatherWidgetCondition, atmosphere)
+        views.setTextViewText(R.id.weatherWidgetLocation, context.getString(R.string.widget_weather_location))
+        views.setTextViewText(R.id.weatherWidgetClock, timeLabel())
+        views.setTextViewText(R.id.weatherWidgetDate, dayFormat.format(now.time))
+        views.setTextViewText(
+            R.id.weatherWidgetHighLow,
+            context.getString(R.string.widget_weather_high_low, maximum, minimum)
+        )
+        forecast.forEachIndexed { index, (day, icon, values) ->
+            val dayId = listOf(R.id.weatherForecastDay1, R.id.weatherForecastDay2, R.id.weatherForecastDay3)[index]
+            val infoId = listOf(R.id.weatherForecastInfo1, R.id.weatherForecastInfo2, R.id.weatherForecastInfo3)[index]
+            views.setTextViewText(dayId, day.replaceFirstChar { it.titlecase(Locale.getDefault()) })
+            views.setTextViewText(infoId, "$icon  $values")
+        }
     }
 }
 

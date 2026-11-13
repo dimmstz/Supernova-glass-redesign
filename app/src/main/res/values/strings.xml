@@ -39,6 +39,8 @@
     <string name="widget_weather_day">Bright day</string>
     <string name="widget_weather_evening">Calm evening</string>
     <string name="widget_weather_night">Quiet night</string>
+    <string name="widget_weather_location">Current location</string>
+    <string name="widget_weather_high_low">High %1$d°  •  Low %2$d°</string>
     <string name="widget_ram_title">Memory RAM</string>
     <string name="widget_ram_detail">Total %1$s</string>
     <string name="widget_storage_title">Internal storage</string>

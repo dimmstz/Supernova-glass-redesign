@@ -155,24 +155,32 @@ object DefaultLayoutBuilder {
         // these built-in widgets as ordinary hostable items so users can move,
         // resize, remove or restore them exactly like any Android widget.
         if (cols >= 6 && rows >= 2) {
-            val builtIns = listOf(
-                Triple(0, 0, WeatherClockWidgetProvider::class.java) to R.string.widget_weather_title,
-                Triple(3, 0, RamWidgetProvider::class.java) to R.string.widget_ram_title,
-                Triple(0, 1, StorageWidgetProvider::class.java) to R.string.widget_storage_title,
-                Triple(3, 1, CacheCleanerWidgetProvider::class.java) to R.string.widget_cache_title
+            data class BuiltIn(
+                val x: Int,
+                val y: Int,
+                val spanX: Int,
+                val spanY: Int,
+                val provider: Class<out android.appwidget.AppWidgetProvider>,
+                val label: Int
             )
-            return appItems + builtIns.map { (slot, labelRes) ->
+            val builtIns = listOf(
+                BuiltIn(0, 0, 6, 2, WeatherClockWidgetProvider::class.java, R.string.widget_weather_title),
+                BuiltIn(0, 2, 3, 1, RamWidgetProvider::class.java, R.string.widget_ram_title),
+                BuiltIn(3, 2, 3, 1, StorageWidgetProvider::class.java, R.string.widget_storage_title),
+                BuiltIn(0, 3, 3, 1, CacheCleanerWidgetProvider::class.java, R.string.widget_cache_title)
+            )
+            return appItems + builtIns.filter { it.x + it.spanX <= cols && it.y + it.spanY <= rows }.map { item ->
                 LauncherItem(
                     id = UUID.randomUUID().toString(),
                     itemType = ItemType.WIDGET,
                     container = ContainerType.WORKSPACE,
                     page = 0,
-                    cellX = slot.first,
-                    cellY = slot.second,
-                    spanX = 3,
-                    spanY = 1,
-                    label = context.getString(labelRes),
-                    widgetProvider = ComponentName(context, slot.third).flattenToString()
+                    cellX = item.x,
+                    cellY = item.y,
+                    spanX = item.spanX,
+                    spanY = item.spanY,
+                    label = context.getString(item.label),
+                    widgetProvider = ComponentName(context, item.provider).flattenToString()
                 )
             }
         }
