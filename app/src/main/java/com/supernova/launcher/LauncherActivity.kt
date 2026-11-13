@@ -26,6 +26,9 @@ import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
@@ -4488,20 +4491,59 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
             R.string.wallpaper_forest to R.drawable.wallpaper_floresta,
             R.string.wallpaper_ocean to R.drawable.wallpaper_oceano
         )
+        val density = resources.displayMetrics.density
         var selected = 0
+        val grid = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
+        }
+        val tiles = mutableListOf<ImageView>()
+        fun select(index: Int) {
+            selected = index
+            tiles.forEachIndexed { tileIndex, image ->
+                image.alpha = if (tileIndex == selected) 1f else 0.58f
+                image.elevation = if (tileIndex == selected) 6 * density else 0f
+            }
+        }
+        wallpapers.chunked(2).forEachIndexed { rowIndex, row ->
+            val rowView = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER
+            }
+            row.forEachIndexed { columnIndex, (titleRes, drawableRes) ->
+                val index = rowIndex * 2 + columnIndex
+                val tile = ImageView(this).apply {
+                    contentDescription = getString(titleRes)
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    setImageResource(drawableRes)
+                    setPadding((2 * density).toInt(), (2 * density).toInt(), (2 * density).toInt(), (2 * density).toInt())
+                    setOnClickListener { select(index) }
+                }
+                tiles += tile
+                rowView.addView(tile, LinearLayout.LayoutParams(0, (132 * density).toInt()).apply {
+                    weight = 1f
+                    marginStart = (5 * density).toInt()
+                    marginEnd = (5 * density).toInt()
+                    topMargin = (5 * density).toInt()
+                    bottomMargin = (5 * density).toInt()
+                })
+            }
+            grid.addView(rowView, LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ))
+        }
+        select(0)
+        val content = ScrollView(this).apply {
+            addView(grid)
+        }
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.wallpaper_lumi_collection)
-            .setSingleChoiceItems(
-                wallpapers.map { getString(it.first) }.toTypedArray(),
-                selected
-            ) { _, which -> selected = which }
+            .setView(content)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.wallpaper_apply) { _, _ ->
                 val resource = wallpapers[selected].second
                 runCatching {
-                    WallpaperManager.getInstance(this).setStream(
-                        resources.openRawResource(resource).use { it }
-                    )
+                    WallpaperManager.getInstance(this).setResource(resource, WallpaperManager.FLAG_SYSTEM)
                 }.onSuccess {
                     Toast.makeText(this, R.string.wallpaper_applied, Toast.LENGTH_SHORT).show()
                 }.onFailure {

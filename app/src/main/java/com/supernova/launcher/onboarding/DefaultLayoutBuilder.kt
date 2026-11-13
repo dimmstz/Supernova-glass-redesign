@@ -151,10 +151,10 @@ object DefaultLayoutBuilder {
                 userSerial = app.userSerial
             )
         }
-        // The first-run 6x4 layout has two clear rows above the app row. Keep
+        // The first-run layout has clear rows above the app row. Keep
         // these built-in widgets as ordinary hostable items so users can move,
         // resize, remove or restore them exactly like any Android widget.
-        if (cols >= 6 && rows >= 2) {
+        if (cols >= 4 && rows >= 4) {
             data class BuiltIn(
                 val x: Int,
                 val y: Int,
@@ -164,10 +164,10 @@ object DefaultLayoutBuilder {
                 val label: Int
             )
             val builtIns = listOf(
-                BuiltIn(0, 0, 6, 2, WeatherClockWidgetProvider::class.java, R.string.widget_weather_title),
-                BuiltIn(0, 2, 3, 1, RamWidgetProvider::class.java, R.string.widget_ram_title),
-                BuiltIn(3, 2, 3, 1, StorageWidgetProvider::class.java, R.string.widget_storage_title),
-                BuiltIn(0, 3, 3, 1, CacheCleanerWidgetProvider::class.java, R.string.widget_cache_title)
+                BuiltIn(0, 0, 4, 2, WeatherClockWidgetProvider::class.java, R.string.widget_weather_title),
+                BuiltIn(0, 2, 2, 1, RamWidgetProvider::class.java, R.string.widget_ram_title),
+                BuiltIn(2, 2, 2, 1, StorageWidgetProvider::class.java, R.string.widget_storage_title),
+                BuiltIn(0, 3, 2, 1, CacheCleanerWidgetProvider::class.java, R.string.widget_cache_title)
             )
             return appItems + builtIns.filter { it.x + it.spanX <= cols && it.y + it.spanY <= rows }.map { item ->
                 LauncherItem(
