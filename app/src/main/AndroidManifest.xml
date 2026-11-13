@@ -194,6 +194,19 @@
                 android:resource="@xml/widget_cache_cleaner_info" />
         </receiver>
 
+        <receiver
+            android:name=".widget.LumiSystemInfoWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_system_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dimm.lumilite.action.CLEAN_CACHE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_system_info" />
+        </receiver>
+
         <!-- configChanges: rotation and window resizes are handled in place
              by onConfigurationChanged. A launcher that is torn down and
              rebuilt on every rotation re-queries the app list, re-creates

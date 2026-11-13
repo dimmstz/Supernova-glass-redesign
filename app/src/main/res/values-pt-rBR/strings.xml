@@ -48,6 +48,7 @@
     <string name="widget_cache_value">Cache pronto</string>
     <string name="widget_cache_detail">Limpe arquivos temporários com um toque</string>
     <string name="widget_cache_button">Limpar cache</string>
+    <string name="widget_system_title">Ferramentas do sistema Lumi</string>
     <string name="home_action_wallpaper">Papéis de parede</string>
     <string name="wallpaper_lumi_collection">Coleção Lumi Lite</string>
     <string name="wallpaper_desert">Monólito do deserto</string>

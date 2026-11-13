@@ -49,6 +49,7 @@
     <string name="widget_cache_value">Cache ready</string>
     <string name="widget_cache_detail">Clear temporary files with one tap</string>
     <string name="widget_cache_button">Clean cache</string>
+    <string name="widget_system_title">Lumi system tools</string>
     <string name="home_action_wallpaper">Wallpapers</string>
     <string name="wallpaper_lumi_collection">Lumi Lite collection</string>
     <string name="wallpaper_desert">Desert monolith</string>

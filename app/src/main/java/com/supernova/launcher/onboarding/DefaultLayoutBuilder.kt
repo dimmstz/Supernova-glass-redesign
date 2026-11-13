@@ -15,9 +15,7 @@ import com.supernova.launcher.data.DeviceProfile
 import com.supernova.launcher.data.ItemType
 import com.supernova.launcher.data.LaunchableApp
 import com.supernova.launcher.data.LauncherItem
-import com.supernova.launcher.widget.CacheCleanerWidgetProvider
-import com.supernova.launcher.widget.RamWidgetProvider
-import com.supernova.launcher.widget.StorageWidgetProvider
+import com.supernova.launcher.widget.LumiSystemInfoWidgetProvider
 import com.supernova.launcher.widget.WeatherClockWidgetProvider
 import java.util.UUID
 
@@ -165,9 +163,7 @@ object DefaultLayoutBuilder {
             )
             val builtIns = listOf(
                 BuiltIn(0, 0, 4, 2, WeatherClockWidgetProvider::class.java, R.string.widget_weather_title),
-                BuiltIn(0, 2, 2, 1, RamWidgetProvider::class.java, R.string.widget_ram_title),
-                BuiltIn(2, 2, 2, 1, StorageWidgetProvider::class.java, R.string.widget_storage_title),
-                BuiltIn(0, 3, 2, 1, CacheCleanerWidgetProvider::class.java, R.string.widget_cache_title)
+                BuiltIn(0, 2, 4, 1, LumiSystemInfoWidgetProvider::class.java, R.string.widget_system_title)
             )
             return appItems + builtIns.filter { it.x + it.spanX <= cols && it.y + it.spanY <= rows }.map { item ->
                 LauncherItem(

@@ -147,6 +147,61 @@ class CacheCleanerWidgetProvider : LumiInfoProvider() {
     }
 }
 
+/** A compact 4x1 system card that replaces the three separate Lumi cards. */
+class LumiSystemInfoWidgetProvider : LumiInfoProvider() {
+    override fun views(context: Context): RemoteViews =
+        RemoteViews(context.packageName, R.layout.widget_system_info)
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action != ACTION_CLEAN_CACHE) return
+        runCatching { context.cacheDir.deleteRecursively() }
+        runCatching { context.externalCacheDir?.deleteRecursively() }
+        updateAll(context, LumiSystemInfoWidgetProvider::class.java) { render(context, it) }
+    }
+
+    override fun render(context: Context, views: RemoteViews) {
+        val memory = ActivityManager.MemoryInfo()
+        (context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager)
+            ?.getMemoryInfo(memory)
+        val usedRam = (memory.totalMem - memory.availMem).coerceAtLeast(0L)
+        views.setTextViewText(R.id.systemRamTitle, context.getString(R.string.widget_ram_title))
+        views.setTextViewText(R.id.systemRamValue, formatBytes(usedRam))
+        views.setTextViewText(
+            R.id.systemRamDetail,
+            context.getString(R.string.widget_ram_detail, formatBytes(memory.totalMem))
+        )
+
+        val stat = StatFs(Environment.getDataDirectory().path)
+        val total = stat.totalBytes
+        val free = stat.availableBytes
+        views.setTextViewText(
+            R.id.systemStorageTitle,
+            context.getString(R.string.widget_storage_title)
+        )
+        views.setTextViewText(R.id.systemStorageValue, formatBytes(total - free))
+        views.setTextViewText(
+            R.id.systemStorageDetail,
+            context.getString(R.string.widget_storage_detail, formatBytes(free), formatBytes(total))
+        )
+
+        views.setTextViewText(R.id.systemCacheTitle, context.getString(R.string.widget_cache_title))
+        views.setTextViewText(R.id.systemCacheDetail, context.getString(R.string.widget_cache_detail))
+        views.setTextViewText(R.id.systemCacheAction, context.getString(R.string.widget_cache_button))
+        val cleanIntent = Intent(context, LumiSystemInfoWidgetProvider::class.java)
+            .setAction(ACTION_CLEAN_CACHE)
+        views.setOnClickPendingIntent(
+            R.id.systemCacheAction,
+            PendingIntent.getBroadcast(
+                context,
+                7002,
+                cleanIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+    }
+}
+
 private fun formatBytes(bytes: Long): String {
     if (bytes < 1024L) return "$bytes B"
     val units = arrayOf("KB", "MB", "GB", "TB")
