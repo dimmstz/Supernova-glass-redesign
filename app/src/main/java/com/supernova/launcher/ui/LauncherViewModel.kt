@@ -52,6 +52,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 class LauncherViewModel(
@@ -71,6 +73,9 @@ class LauncherViewModel(
     }
 
     private val appsFlow = MutableStateFlow(emptyList<LaunchableApp>())
+    // Onboarding and the first catalog scan can request smart groups at nearly
+    // the same time. Keep one authoritative replacement in flight.
+    private val smartGroupsMutex = Mutex()
     private val privateSpaceFlow = MutableStateFlow<PrivateSpace?>(null)
     private val currentPageFlow = MutableStateFlow(0)
     // Launch counts for most-used sort; device-local, collected eagerly.
@@ -246,8 +251,8 @@ class LauncherViewModel(
             }
         }
         // Smart folders are on by default, so the category folders are made
-        // automatically; the toggle and the install hook regenerate them, so
-        // this first pass only covers a store that has none yet.
+        // automatically; the toggle, install hook and startup reconciliation
+        // all regenerate them from the complete app catalog.
         viewModelScope.launch {
             val ready = state.first { it.loaded && it.apps.isNotEmpty() }
             // Reconcile once on every launch so taxonomy improvements and new
@@ -1514,16 +1519,11 @@ class LauncherViewModel(
         }
     }
 
-    // freshInstall: the one pass a new install makes as the wizard opens (see
-    // seedDefaultLayout). It creates only the folders that start small; the
-    // bigger categories are dismissed, as if the user had deleted them, so
-    // no later pass brings them back. After that the folders are the user's:
-    // they grow as apps install, and turning Smart Folders on again brings
-    // the big ones back too.
-    private suspend fun regenerateSmartFolders(
-        freshInstall: Boolean = false,
-        mode: String? = null
-    ) {
+    // Generate from the complete launchable-app enumeration. The first pass
+    // must use the same rules as every later pass: previously we treated the
+    // fresh install as a preview, discarded categories with more than four
+    // apps, and permanently dismissed those category names.
+    private suspend fun regenerateSmartFolders(mode: String? = null) = smartGroupsMutex.withLock {
         val generated = withContext(Dispatchers.Default) {
             val hidden = state.value.prefs.hiddenApps
             // Fresh enumeration: the install hook fires before appsFlow updates.
@@ -1575,13 +1575,9 @@ class LauncherViewModel(
                 )
             }
         }
-        val otherName = getApplication<Application>()
-            .getString(com.supernova.launcher.ui.settings.EnumLabels.of(com.supernova.launcher.data.SmartCategory.OTHER))
-        val (kept, tooBig) = generated.partition {
-            !freshInstall || it.name == otherName || it.members.size <= SMART_FOLDER_FRESH_INSTALL_MAX_APPS
-        }
-        // The store drops the dismissed names itself, in the same edit.
-        preferences.replaceSmartGroups(kept, dismiss = tooBig.mapTo(mutableSetOf()) { it.name })
+        // An empty dismiss set preserves deliberate user deletions while
+        // allowing every newly detected category to appear on first access.
+        preferences.replaceSmartGroups(generated)
     }
 
     suspend fun availableIconPacks(): List<IconPack> =
@@ -1643,7 +1639,7 @@ class LauncherViewModel(
         }
         repository.seedDefaultLayout(items)
         placeDefaultSearchBar()
-        if (prefs.smartFolders) regenerateSmartFolders(freshInstall = true)
+        if (prefs.smartFolders) regenerateSmartFolders()
     }
 
     // The factory default has no home-screen search bar. Never touches a bar
@@ -1724,11 +1720,9 @@ class LauncherViewModel(
         // ...and how much longer it then waits for the icon configuration
         // itself, before drawing with whatever the catalog has.
         const val STARTUP_VALVE_GIVE_UP_MS = 3500L
-        // Categories with fewer apps than this don't earn a smart folder.
-        // Two apps are enough to make a useful category without creating a
-        // noisy one-app folder; this also helps smaller Brazilian app sets.
-        const val SMART_FOLDER_MIN_APPS = 2
+        // Keep one-app categories too: otherwise the first scan appears to
+        // lose regional, banking or utility apps from smart organization.
+        const val SMART_FOLDER_MIN_APPS = 1
         // ...and on a fresh install, nor do ones with more than this.
-        const val SMART_FOLDER_FRESH_INSTALL_MAX_APPS = 4
     }
 }
