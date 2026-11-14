@@ -20,20 +20,29 @@ The next release line is `v0.3.12`. The app includes a complete Brazilian Portug
 The project requires JDK 17 and Android SDK Platform 36. After installing those prerequisites, run:
 
 ```bash
-./gradlew assembleSafeDebug
+./gradlew testSafeDebug assembleSafeDebug
 ```
 
-The debug APK is written to `app/build/outputs/apk/debug/`. For a release build, run:
+The debug APK is written to `app/build/outputs/apk/safe/debug/`. For a release build, run:
 
 ```bash
 ./gradlew assembleSafeRelease
 ```
 
-Release builds use the existing `keystore.properties` configuration locally when a production signing key is available. GitHub Actions refuses to publish a release unless the same persistent production key is supplied through `LUMI_RELEASE_KEYSTORE_BASE64`, `LUMI_RELEASE_STORE_PASSWORD`, `LUMI_RELEASE_KEY_ALIAS` and `LUMI_RELEASE_KEY_PASSWORD`. This is required because Android updates only when the package, signature and versionCode are compatible. Debug artifacts intentionally use the separate package `com.dimm.lumilite.debug` and are not update-compatible with the release package.
+Release builds use the existing `keystore.properties` configuration locally when a production signing key is available. For GitHub Releases, configure all four repository secrets to sign with the same persistent key:
+
+- `LUMI_RELEASE_KEYSTORE_BASE64`
+- `LUMI_RELEASE_STORE_PASSWORD`
+- `LUMI_RELEASE_KEY_ALIAS`
+- `LUMI_RELEASE_KEY_PASSWORD`
+
+If none of these secrets are configured, CI generates a temporary signing key so the release APK can still be installed and tested. That temporary key is different for each release: Android may require uninstalling the previous Lumi Lite installation before installing the APK, and app data can be lost. Do not use temporary-key builds as seamless updates. If only some of the four secrets are configured, the release is stopped instead of silently publishing with the wrong key.
+
+Debug artifacts intentionally use the separate package `com.dimm.lumilite.debug` and are not update-compatible with the release package.
 
 ## Continuous integration and releases
 
-Every push to `main` and every pull request targeting `main` runs the Android build and uploads a debug APK artifact. A version tag matching `v*` runs the release build, uploads the APK artifact, and creates a GitHub Release with generated release notes and the APK attached.
+Every push to `main` and every pull request targeting `main` runs unit tests, builds the debug APK, validates its package ID and uploads the artifact. A version tag matching `v*` runs the release build, validates the package ID and version against the tag, signs and verifies the APK, uploads the artifact, and creates a GitHub Release with generated release notes and the APK attached.
 
 To publish a new release after updating `versionCode` and `versionName` in `app/build.gradle.kts`:
 
@@ -42,7 +51,7 @@ git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-The workflow then performs the build and publishes the release automatically. It can also be started manually from the Actions tab.
+The workflow then performs the build and publishes the release automatically.
 
 ## Design system update
 
