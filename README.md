@@ -42,7 +42,7 @@ Debug artifacts intentionally use the separate package `com.dimm.lumilite.debug`
 
 ## Continuous integration and releases
 
-Every push to `main` and every pull request targeting `main` runs unit tests, builds the debug APK, validates its package ID and uploads the artifact. A version tag matching `v*` runs the release build, validates the package ID and version against the tag, signs and verifies the APK, uploads the artifact, and creates a GitHub Release with generated release notes and the APK attached.
+Every push to `main` and every pull request targeting `main` runs unit tests, Android lint and Detekt static analysis, builds the debug APK, validates its package ID and uploads the artifact. A version tag matching `v*` runs unit tests and release lint, builds the release APK, validates the package ID and version against the tag, signs and verifies the APK, uploads the artifact, and creates a GitHub Release with generated release notes and the APK attached.
 
 To publish a new release after updating `versionCode` and `versionName` in `app/build.gradle.kts`:
 
