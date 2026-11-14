@@ -257,6 +257,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/drawer_group_options"
+                android:tooltipText="@string/drawer_group_options"
                 android:padding="12dp"
                 android:src="@drawable/ic_drawer_group_options" />
         </LinearLayout>
