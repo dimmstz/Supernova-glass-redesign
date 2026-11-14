@@ -22,9 +22,10 @@ env:
 
 jobs:
   build-debug:
-    name: Build debug APK
+    name: Test and build debug APK
     if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,8 +45,17 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
-        run: ./gradlew --no-daemon --stacktrace assembleSafeDebug
+      - name: Run unit tests and build debug APK
+        run: ./gradlew --no-daemon --stacktrace testSafeDebug assembleSafeDebug
+
+      - name: Verify debug APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=$(find app/build/outputs/apk/safe/debug -maxdepth 1 -name '*.apk' -print -quit)
+          test -n "$apk" && test -s "$apk"
+          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/aapt" dump badging "$apk" | grep -Fq "package: name='com.dimm.lumilite.debug'"
+          echo "Debug APK validated: $apk"
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
@@ -56,9 +66,10 @@ jobs:
           retention-days: 14
 
   build-release:
-    name: Build and publish release APK
+    name: Build, sign and publish release APK
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: write
     steps:
@@ -83,44 +94,88 @@ jobs:
       - name: Build release APK
         run: ./gradlew --no-daemon --stacktrace assembleSafeRelease
 
-      - name: Sign release APK for CI distribution
+      - name: Sign and verify release APK
+        id: signing
+        shell: bash
         env:
           LUMI_KEYSTORE_B64: ${{ secrets.LUMI_RELEASE_KEYSTORE_BASE64 }}
           LUMI_STORE_PASSWORD: ${{ secrets.LUMI_RELEASE_STORE_PASSWORD }}
           LUMI_KEY_ALIAS: ${{ secrets.LUMI_RELEASE_KEY_ALIAS }}
           LUMI_KEY_PASSWORD: ${{ secrets.LUMI_RELEASE_KEY_PASSWORD }}
         run: |
-          # A new key on every run makes Android reject an update as a
-          # different app. Release signing must therefore use the same
-          # long-lived repository secrets on every tag.
-          if [ -n "$LUMI_KEYSTORE_B64" ] && [ -n "$LUMI_STORE_PASSWORD" ] && [ -n "$LUMI_KEY_ALIAS" ] && [ -n "$LUMI_KEY_PASSWORD" ]; then
+          set -euo pipefail
+          unsigned_apk=$(find app/build/outputs/apk/safe/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
+          if [ -z "$unsigned_apk" ]; then
+            unsigned_apk=$(find app/build/outputs/apk/safe/release -maxdepth 1 -name '*.apk' -print -quit)
+          fi
+          test -n "$unsigned_apk" && test -s "$unsigned_apk"
+
+          badging=$("$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/aapt" dump badging "$unsigned_apk")
+          expected_version=$(sed -n 's/.*versionCode = \\([0-9][0-9]*\\).*/\\1/p' app/build.gradle.kts | head -1)
+          expected_name=$(sed -n 's/.*versionName = "\\([^"]*\\)".*/\\1/p' app/build.gradle.kts | head -1)
+          test -n "$expected_version" && test -n "$expected_name"
+          [ "$expected_name" = "$GITHUB_REF_NAME" ] || {
+            echo "::error::Tag $GITHUB_REF_NAME does not match app versionName $expected_name"
+            exit 1
+          }
+          echo "$badging" | grep -Fq "package: name='com.dimm.lumilite'"
+          echo "$badging" | grep -Fq "versionCode='$expected_version'"
+          echo "$badging" | grep -Fq "versionName='$expected_name'"
+
+          has_keystore=0
+          for value in "$LUMI_KEYSTORE_B64" "$LUMI_STORE_PASSWORD" "$LUMI_KEY_ALIAS" "$LUMI_KEY_PASSWORD"; do
+            if [ -n "$value" ]; then has_keystore=$((has_keystore + 1)); fi
+          done
+
+          if [ "$has_keystore" -eq 4 ]; then
             printf '%s' "$LUMI_KEYSTORE_B64" | base64 --decode > ci-release.jks
+            test -s ci-release.jks
+            keytool -list -keystore ci-release.jks -storepass "$LUMI_STORE_PASSWORD" -alias "$LUMI_KEY_ALIAS" >/dev/null
             store_password="$LUMI_STORE_PASSWORD"
             key_alias="$LUMI_KEY_ALIAS"
             key_password="$LUMI_KEY_PASSWORD"
+            echo "signing_mode=persistent" >> "$GITHUB_OUTPUT"
+          elif [ "$has_keystore" -eq 0 ]; then
+            # Fallback for CI distribution only. A new temporary key is
+            # generated for this release; installing it over another signing
+            # certificate will require uninstalling the previous app.
+            store_password=$(openssl rand -hex 24)
+            key_alias="lumilite-ci"
+            key_password="$store_password"
+            keytool -genkeypair -noprompt -keystore ci-release.jks -storetype JKS \
+              -storepass "$store_password" -keypass "$key_password" \
+              -alias "$key_alias" -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Lumi Lite Temporary CI Release"
+            echo "signing_mode=temporary" >> "$GITHUB_OUTPUT"
+            echo "::warning::No persistent signing secrets found. This APK is installable, but updating an existing install may require uninstalling it first."
           else
-            echo "::error::Persistent release signing secrets are missing. Refusing to publish an APK with a new key because it cannot update the installed Lumi Lite app."
+            echo "::error::Only some release signing secrets are configured. Add all four secrets or remove all four to use temporary CI signing."
             exit 1
           fi
-          unsigned_apk=$(find app/build/outputs/apk/safe/release -maxdepth 1 -name '*unsigned.apk' -print -quit)
-          test -n "$unsigned_apk"
-          badging=$("$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/aapt" dump badging "$unsigned_apk")
-          echo "$badging" | grep -Fq "package: name='com.dimm.lumilite'"
-          expected_version=$(sed -n 's/.*versionCode = \([0-9][0-9]*\).*/\1/p' app/build.gradle.kts | head -1)
-          expected_name=$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -1)
-          echo "$badging" | grep -Fq "versionCode='$expected_version'"
-          echo "$badging" | grep -Fq "versionName='$expected_name'"
+
+          output_apk="LumiLite-${GITHUB_REF_NAME}.apk"
           "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" sign \
             --ks ci-release.jks \
             --ks-key-alias "$key_alias" \
             --ks-pass "pass:$store_password" \
             --key-pass "pass:$key_password" \
-            --out "LumiLite-${GITHUB_REF_NAME}.apk" \
+            --out "$output_apk" \
             "$unsigned_apk"
-          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "LumiLite-${GITHUB_REF_NAME}.apk"
+          "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/apksigner" verify --verbose "$output_apk"
+          test -s "$output_apk"
+          signed_badging=$("$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}/aapt" dump badging "$output_apk")
+          echo "$signed_badging" | grep -Fq "package: name='com.dimm.lumilite'"
+          echo "$signed_badging" | grep -Fq "versionCode='$expected_version'"
+          echo "$signed_badging" | grep -Fq "versionName='$expected_name'"
+          rm -f ci-release.jks
+          echo "Validated signed APK: $output_apk"
 
-      - name: Rename APK
-        run: test -s "LumiLite-${GITHUB_REF_NAME}.apk"
+          {
+            echo "### Release APK validation"
+            echo "- Package: `com.dimm.lumilite`"
+            echo "- Version: `$expected_name` (code `$expected_version`)"
+            echo "- Signing: `$([ "$has_keystore" -eq 4 ] && echo persistent || echo temporary)`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
