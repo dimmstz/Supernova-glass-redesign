@@ -1398,61 +1398,112 @@ class DrawerController(
 
     private fun showGroupOptionsCard() {
         val density = context.resources.displayMetrics.density
+        fun dp(value: Int) = (value * density).roundToInt()
+        val prefs = viewModel.state.value.prefs
+        val primary = context.getColor(R.color.textPrimary)
+        val secondary = context.getColor(R.color.textSecondary)
         val content = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding((24 * density).toInt(), 0, (24 * density).toInt(), 0)
+            setPadding(dp(24), 0, dp(24), 0)
         }
-        val summary = TextView(context).apply {
+        content.addView(TextView(context).apply {
             text = context.getString(R.string.drawer_group_options_summary)
-            setTextColor(0xFFB8BBC4.toInt())
+            setTextColor(secondary)
             textSize = 14f
-            setPadding(0, 0, 0, (12 * density).toInt())
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setPadding(0, 0, 0, dp(18))
+        })
+
+        val smartRow = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            minimumHeight = dp(68)
         }
-        val smartTitle = TextView(context).apply {
+        val smartCopy = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        smartCopy.addView(TextView(context).apply {
             text = context.getString(R.string.smart_groups)
-            setTextColor(0xFFF2F3F7.toInt())
+            setTextColor(primary)
             textSize = 16f
-        }
+        })
+        smartCopy.addView(TextView(context).apply {
+            text = context.getString(R.string.drawer_smart_groups_summary)
+            setTextColor(secondary)
+            textSize = 12f
+            setPadding(0, dp(3), dp(12), 0)
+        })
         val smart = android.widget.Switch(context).apply {
-            text = context.getString(R.string.smart_groups)
-            textSize = 16f
-            isChecked = viewModel.state.value.prefs.smartFolders
-            setOnCheckedChangeListener { _, checked -> viewModel.setSmartFolders(checked) }
+            isChecked = prefs.smartFolders
+            contentDescription = context.getString(R.string.smart_groups)
+        }
+        smartRow.addView(smartCopy)
+        smartRow.addView(smart)
+        content.addView(smartRow)
+
+        content.addView(TextView(context).apply {
+            text = context.getString(R.string.drawer_group_display_mode)
+            setTextColor(primary)
+            textSize = 14f
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            setPadding(0, dp(20), 0, dp(8))
+        })
+
+        val modeSummary = TextView(context).apply {
+            setTextColor(secondary)
+            textSize = 12f
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setPadding(dp(36), 0, 0, dp(8))
+        }
+        val folders = android.widget.RadioButton(context).apply {
+            id = View.generateViewId()
+            text = context.getString(R.string.drawer_category_folders)
+            textSize = 15f
+            setTextColor(primary)
+            minHeight = dp(48)
+        }
+        val tabs = android.widget.RadioButton(context).apply {
+            id = View.generateViewId()
+            text = context.getString(R.string.drawer_category_tabs)
+            textSize = 15f
+            setTextColor(primary)
+            minHeight = dp(48)
         }
         val mode = android.widget.RadioGroup(context).apply {
             orientation = android.widget.RadioGroup.VERTICAL
-            val folders = android.widget.RadioButton(context).apply {
-                id = View.generateViewId()
-                text = context.getString(R.string.drawer_category_folders)
-                textSize = 16f
-            }
-            val tabs = android.widget.RadioButton(context).apply {
-                id = View.generateViewId()
-                text = context.getString(R.string.drawer_category_tabs)
-                textSize = 16f
-            }
             addView(folders)
             addView(tabs)
-            if (viewModel.state.value.prefs.smartGroupMode == "FOLDERS") {
-                check(folders.id)
-            } else {
-                check(tabs.id)
-            }
-            setOnCheckedChangeListener { group, checkedId ->
-                if (checkedId == folders.id) viewModel.setSmartGroupMode("FOLDERS")
-                if (checkedId == tabs.id) viewModel.setSmartGroupMode("TABS")
+            check(if (prefs.smartGroupMode == "FOLDERS") folders.id else tabs.id)
+        }
+        modeSummary.text = context.getString(
+            if (prefs.smartGroupMode == "FOLDERS") R.string.drawer_category_folders_summary
+            else R.string.drawer_category_tabs_summary
+        )
+        mode.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                folders.id -> {
+                    viewModel.setSmartGroupMode("FOLDERS")
+                    modeSummary.text = context.getString(R.string.drawer_category_folders_summary)
+                }
+                tabs.id -> {
+                    viewModel.setSmartGroupMode("TABS")
+                    modeSummary.text = context.getString(R.string.drawer_category_tabs_summary)
+                }
             }
         }
-        content.addView(summary)
-        content.addView(smartTitle)
-        content.addView(smart)
-        content.addView(TextView(context).apply {
-            text = context.getString(R.string.drawer_category_tabs_summary)
-            setTextColor(0xFF8E929C.toInt())
-            textSize = 13f
-            setPadding(0, (4 * density).toInt(), 0, (4 * density).toInt())
-        })
+        fun setModeEnabled(enabled: Boolean) {
+            folders.isEnabled = enabled
+            tabs.isEnabled = enabled
+            modeSummary.alpha = if (enabled) 1f else 0.55f
+        }
+        setModeEnabled(prefs.smartFolders)
+        smart.setOnCheckedChangeListener { _, checked ->
+            viewModel.setSmartFolders(checked)
+            setModeEnabled(checked)
+        }
         content.addView(mode)
+        content.addView(modeSummary)
 
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.drawer_group_options_title)
