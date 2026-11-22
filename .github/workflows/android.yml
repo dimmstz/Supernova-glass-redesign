@@ -48,6 +48,17 @@ jobs:
       - name: Run unit tests, lint and build debug APK
         run: ./gradlew --no-daemon --stacktrace testSafeDebug lintSafeDebug assembleSafeDebug
 
+      - name: Preserve Android Lint reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-lint-reports-${{ github.run_id }}
+          path: |
+            app/build/reports/lint-results-safeDebug.*
+            app/build/intermediates/lint_intermediate_text_report/safeDebug/lintReportSafeDebug/lint-results-safeDebug.txt
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Verify debug APK
         shell: bash
         run: |
