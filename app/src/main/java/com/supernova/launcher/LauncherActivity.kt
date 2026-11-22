@@ -2269,6 +2269,7 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         }
     }
 
+    @android.annotation.SuppressLint("MissingPermission")
     private fun createBlurredWallpaper(percent: Int): Bitmap? = runCatching {
         val width = binding.root.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
         val height = binding.root.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels
