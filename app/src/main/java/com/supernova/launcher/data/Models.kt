@@ -115,10 +115,10 @@ data class LauncherModel(
 
 @Serializable
 data class LauncherPrefs(
-    // Phone grid, 4 columns by 6 rows (see DeviceProfile).
+    // Phone grid, 5 columns by 6 rows (see DeviceProfile).
     val gridRows: Int = 6,
-    val gridCols: Int = 4,
-    val dockCount: Int = 4,
+    val gridCols: Int = 5,
+    val dockCount: Int = 5,
     val iconScale: Float = 1.5f,
     val showLabels: Boolean = true,
     val wallpaperScroll: Boolean = true,
@@ -177,7 +177,7 @@ data class LauncherPrefs(
     val dockBgPadding: Boolean = true,
     // Off by default: dock icons go unlabelled.
     val dockLabels: Boolean = false,
-    val dockIconScale: Float = 1f,
+    val dockIconScale: Float = 1.5f,
     val widgetOverlap: Boolean = false,
     // Placement drops may land on occupied cells (grid bounds still apply);
     // auto-placement (new apps, pins) keeps looking for free cells.
@@ -224,7 +224,7 @@ data class LauncherPrefs(
     // by name: regenerating on an install leaves them out. Turning Smart
     // Folders on again clears it.
     val smartFoldersDismissed: Set<String> = emptySet(),
-    val drawerIconScale: Float = 1f,
+    val drawerIconScale: Float = 1.5f,
     // When on, the drawer follows iconScale and its scale slider hides. On
     // by default.
     val drawerMatchDesktop: Boolean = true,
@@ -309,7 +309,7 @@ data class LauncherPrefs(
     val folderCloseOnLaunch: Boolean = true,
     // Scale of member icons inside the open folder window; matchDesktop
     // follows iconScale instead and hides the slider.
-    val folderIconScale: Float = 1f,
+    val folderIconScale: Float = 1.5f,
     val folderMatchDesktop: Boolean = false,
     // Title text in the open folder window (the edit button stays).
     val folderShowName: Boolean = true,
@@ -369,8 +369,8 @@ data class LauncherPrefs(
     val dockAutoClose: Boolean = false,
     val dockRememberPosition: Boolean = false,
     // Extra padding inside the dock bar, in dp per axis.
-    val dockPaddingH: Int = 10,
-    val dockPaddingV: Int = 10,
+    val dockPaddingH: Int = 0,
+    val dockPaddingV: Int = 0,
     // Global search: web engine (WebProvider name) and per-provider toggles.
     val searchWebProvider: String = "GOOGLE",
     val searchContacts: Boolean = false,
@@ -446,7 +446,7 @@ data class LauncherPrefs(
     // Master animation kill switch consulted via ui/Animations.enabled.
     val disableAnimations: Boolean = false,
     // Playback speed multiplier (ui/AnimationSpeed): SLOW/DEFAULT/FAST/FASTER.
-    val animationSpeed: String = "SLOW",
+    val animationSpeed: String = "DEFAULT",
     // App-launch transition style (ui/LaunchAnimation name). REVEAL is the
     // pre-phase-6 clip-reveal behavior; Adaptive icon is the default.
     val launchAnimation: String = "ADAPTIVE_ICON",
