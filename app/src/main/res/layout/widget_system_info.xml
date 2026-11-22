@@ -18,7 +18,6 @@
             android:id="@+id/systemRamTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RAM"
             android:textColor="#B9C8FF"
             android:textSize="11sp"
             android:textStyle="bold"
@@ -37,12 +36,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#AAB0C4"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:maxLines="1"
             android:ellipsize="end" />
     </LinearLayout>
 
-    <View
+    <TextView
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
@@ -61,7 +60,6 @@
             android:id="@+id/systemStorageTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Armazenamento"
             android:textColor="#B9C8FF"
             android:textSize="11sp"
             android:textStyle="bold"
@@ -106,7 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Limpador Lumi"
             android:textColor="#B9C8FF"
             android:textSize="11sp"
             android:textStyle="bold"
@@ -120,7 +117,6 @@
             android:minHeight="36dp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:text="Limpar"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="11sp"
@@ -131,7 +127,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="#AAB0C4"
-            android:textSize="9sp"
+            android:textSize="11sp"
             android:maxLines="1"
             android:ellipsize="end" />
     </LinearLayout>
