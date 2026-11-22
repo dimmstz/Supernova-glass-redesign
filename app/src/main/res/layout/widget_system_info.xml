@@ -84,7 +84,7 @@
             android:ellipsize="end" />
     </LinearLayout>
 
-    <View
+    <TextView
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
