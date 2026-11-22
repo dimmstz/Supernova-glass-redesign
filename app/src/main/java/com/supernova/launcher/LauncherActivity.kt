@@ -2277,7 +2277,7 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
     private fun createBlurredWallpaper(percent: Int): Bitmap? = runCatching {
         val width = binding.root.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
         val height = binding.root.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels
-        val source = Bitmap.createBitmap(width, height)
+        val source = createBitmap(width, height)
         val drawable = WallpaperManager.getInstance(this).drawable ?: return@runCatching null
         drawable.setBounds(0, 0, width, height)
         drawable.draw(android.graphics.Canvas(source))
