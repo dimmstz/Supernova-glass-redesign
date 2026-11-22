@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+    <string name="drawer_group_name_count">%1$s  ·  %2$d</string>
+    <string name="widget_weather_default_icon">☀</string>
     <string name="app_name">Lumi Lite</string>
     <string name="app_label">Lumi Lite</string>
     <string name="settings">Configurações</string>
@@ -65,6 +67,7 @@
     <plurals name="widget_count">
         <item quantity="one">%1$d widget</item>
         <item quantity="other">%1$d widgets</item>
+        <item quantity="many">%1$d widgets</item>
     </plurals>
     <string name="no_room_on_page">Não há espaço nesta página</string>
     <string name="widget_span">%1$d × %2$d</string>
@@ -78,14 +81,17 @@
     <plurals name="backup_imported_count">
         <item quantity="one">%1$d item restaurado</item>
         <item quantity="other">%1$d itens restaurados</item>
+        <item quantity="many">%1$d itens restaurados</item>
     </plurals>
     <plurals name="backup_dropped_apps">
         <item quantity="one">, %1$d app não encontrado ignorado</item>
         <item quantity="other">, %1$d apps não encontrados ignorados</item>
+        <item quantity="many">, %1$d apps não encontrados ignorados</item>
     </plurals>
     <plurals name="backup_widgets_rebind">
         <item quantity="one">, talvez seja necessário configurar %1$d widget novamente</item>
         <item quantity="other">, talvez seja necessário configurar %1$d widgets novamente</item>
+        <item quantity="many">, talvez seja necessário configurar %1$d widgets novamente</item>
     </plurals>
     <string name="backup_export_failed">Falha ao exportar: %1$s</string>
     <string name="backup_import_failed">Falha ao importar: %1$s</string>
@@ -109,10 +115,12 @@
     <plurals name="custom_icon_apps">
         <item quantity="one">%d app</item>
         <item quantity="other">%d apps</item>
+        <item quantity="many">%d apps</item>
     </plurals>
     <plurals name="custom_icon_folders">
         <item quantity="one">%d pasta</item>
         <item quantity="other">%d pastas</item>
+        <item quantity="many">%d pastas</item>
     </plurals>
     <string name="gestures">Gestos</string>
     <string name="accessibility_description">Permite que o Lumi Lite bloqueie a tela com um gesto. Opcional; nenhum conteúdo da tela é lido.</string>
@@ -281,7 +289,7 @@
     <string name="folder_match_window_color">Usar a cor da janela da pasta</string>
     <string name="folder_columns">Colunas da pasta</string>
     <string name="folder_columns_auto">Automático</string>
-    <string name="folder_sort_az">Ordenar apps da pasta de A a Z</string>
+    <string name="folder_sort_az">Ordenar apps da pasta em ordem alfabética</string>
     <string name="folder_labels">Nomes nos ícones de pastas</string>
     <string name="folder_close_on_launch">Fechar pasta ao abrir app</string>
     <string name="color_default">Padrão</string>
@@ -437,16 +445,17 @@
     <string name="about_license">Licença de código aberto</string>
     <string name="about_license_name">AGPL-3.0</string>
     <string name="about_source">Código-fonte</string>
-    <string name="about_source_url" translatable="false">https://github.com/dimmstz/Supernova-glass-redesign</string>
     <string name="crash_log">Registro de falhas</string>
     <string name="crash_log_none">Nenhuma falha registrada</string>
     <plurals name="crash_log_count">
         <item quantity="one">%1$d falha registrada</item>
         <item quantity="other">%1$d falhas registradas</item>
+        <item quantity="many">%1$d falhas registradas</item>
     </plurals>
     <plurals name="crash_log_message">
         <item quantity="one">Há %1$d falha registrada. Compartilhe o registro com o desenvolvedor e depois apague-o para que o próximo relatório contenha apenas falhas novas.</item>
         <item quantity="other">Há %1$d falhas registradas. Compartilhe o registro com o desenvolvedor e depois apague-o para que o próximo relatório contenha apenas falhas novas.</item>
+        <item quantity="many">Há %1$d falhas registradas. Compartilhe o registro com o desenvolvedor e depois apague-o para que o próximo relatório contenha apenas falhas novas.</item>
     </plurals>
     <string name="crash_log_share">Compartilhar registro de falhas</string>
     <string name="crash_log_share_button">Compartilhar</string>
@@ -616,6 +625,7 @@
     <plurals name="labs_icons_exported">
         <item quantity="one">%d ícone exportado</item>
         <item quantity="other">%d ícones exportados</item>
+        <item quantity="many">%d ícones exportados</item>
     </plurals>
     <string name="labs_clear_icon_cache">Limpar cache de ícones</string>
     <string name="labs_permissions">Permissões</string>
@@ -848,6 +858,7 @@
     <plurals name="feed_shortcut_rows_value">
         <item quantity="one">%1$d linha</item>
         <item quantity="other">%1$d linhas</item>
+        <item quantity="many">%1$d linhas</item>
     </plurals>
     <string name="settings_section_cards">Cards</string>
     <string name="section_cards_subtitle">Crie cards e defina quando eles aparecem</string>
@@ -858,6 +869,7 @@
     <plurals name="card_actions_count">
         <item quantity="one">%d ação</item>
         <item quantity="other">%d ações</item>
+        <item quantity="many">%d ações</item>
     </plurals>
     <string name="today">Hoje</string>
     <string name="tomorrow">Amanhã</string>
@@ -927,6 +939,7 @@
     <plurals name="shortcut_count">
         <item quantity="one">%d atalho</item>
         <item quantity="other">%d atalhos</item>
+        <item quantity="many">%d atalhos</item>
     </plurals>
     <string name="add_category_activities">Atividades</string>
     <string name="no_activities">Nenhuma atividade</string>
