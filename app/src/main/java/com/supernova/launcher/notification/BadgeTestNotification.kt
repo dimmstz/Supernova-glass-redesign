@@ -1,6 +1,9 @@
 package com.supernova.launcher.notification
 
 import android.app.Notification
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +12,7 @@ import android.content.Intent
 import com.supernova.launcher.R
 import com.supernova.launcher.SettingsActivity
 import com.supernova.launcher.ui.BadgeLook
+import androidx.core.content.ContextCompat
 
 // "Test notification badge": one notification from Lumi Lite itself,
 // so a badge turns up on the Lumi Lite Settings icon in the drawer. It
@@ -22,6 +26,9 @@ object BadgeTestNotification {
     // False when Supernova may not post notifications (the permission, or
     // the user switched them off for the app).
     fun post(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return false
         val manager = context.getSystemService(NotificationManager::class.java)
             ?.takeIf { it.areNotificationsEnabled() } ?: return false
         val channel = NotificationChannel(
