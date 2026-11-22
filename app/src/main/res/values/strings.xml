@@ -1,4 +1,6 @@
 <resources>
+    <string name="drawer_group_name_count">%1$s  ·  %2$d</string>
+    <string name="widget_weather_default_icon">☀</string>
     <string name="app_name">Lumi Lite</string>
     <!-- The name the system shows (drawers, the default-home chooser, the
          accessibility and notification-access lists); debug builds rename it. -->
