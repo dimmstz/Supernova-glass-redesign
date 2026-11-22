@@ -15,6 +15,7 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.withClip
 import com.supernova.launcher.R
 import kotlin.math.max
 
@@ -62,20 +63,19 @@ class GlassSurfaceDrawable(
         fillPaint.shader = fillShader
         fillPaint.alpha = drawableAlpha
         fillPaint.colorFilter = colorFilter
-        canvas.save()
-        canvas.clipPath(outlinePath)
-        canvas.drawRect(surface, fillPaint)
+        canvas.withClip(outlinePath) {
+            drawRect(surface, fillPaint)
 
-        glowPaint.shader = glowShader
-        glowPaint.alpha = drawableAlpha
-        glowPaint.colorFilter = colorFilter
-        canvas.drawRect(surface, glowPaint)
+            glowPaint.shader = glowShader
+            glowPaint.alpha = drawableAlpha
+            glowPaint.colorFilter = colorFilter
+            drawRect(surface, glowPaint)
 
-        sheenPaint.shader = sheenShader
-        sheenPaint.alpha = drawableAlpha
-        sheenPaint.colorFilter = colorFilter
-        canvas.drawRect(surface, sheenPaint)
-        canvas.restore()
+            sheenPaint.shader = sheenShader
+            sheenPaint.alpha = drawableAlpha
+            sheenPaint.colorFilter = colorFilter
+            drawRect(surface, sheenPaint)
+        }
 
         val inset = strokeWidth / 2f
         val inner = RectF(surface).apply { inset(inset, inset) }
