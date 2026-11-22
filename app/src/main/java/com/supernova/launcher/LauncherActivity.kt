@@ -31,6 +31,8 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.graphics.Insets
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.scale
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -2223,8 +2225,10 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
         if (!active) {
             binding.drawerBlurBackdrop.setImageDrawable(null)
             binding.dockBlurBackdrop.setImageDrawable(null)
-            binding.drawerBlurBackdrop.setRenderEffect(null)
-            binding.dockBlurBackdrop.setRenderEffect(null)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                binding.drawerBlurBackdrop.setRenderEffect(null)
+                binding.dockBlurBackdrop.setRenderEffect(null)
+            }
             blurredWallpaper?.recycle()
             blurredWallpaper = null
             blurredWallpaperPercent = -1
@@ -2273,15 +2277,15 @@ class LauncherActivity : AppCompatActivity(), WorkspacePagerAdapter.Host, LiveDr
     private fun createBlurredWallpaper(percent: Int): Bitmap? = runCatching {
         val width = binding.root.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
         val height = binding.root.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels
-        val source = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val source = Bitmap.createBitmap(width, height)
         val drawable = WallpaperManager.getInstance(this).drawable ?: return@runCatching null
         drawable.setBounds(0, 0, width, height)
         drawable.draw(android.graphics.Canvas(source))
         // Downsample and smoothly upscale: this is a cheap, deterministic box
         // blur that works on older Android versions and never blurs the UI.
         val divisor = (18 - percent * 0.14f).roundToInt().coerceIn(2, 18)
-        val small = Bitmap.createScaledBitmap(source, (width / divisor).coerceAtLeast(1), (height / divisor).coerceAtLeast(1), true)
-        val result = Bitmap.createScaledBitmap(small, width, height, true)
+        val small = source.scale((width / divisor).coerceAtLeast(1), (height / divisor).coerceAtLeast(1), filter = true)
+        val result = small.scale(width, height, filter = true)
         small.recycle()
         source.recycle()
         result
