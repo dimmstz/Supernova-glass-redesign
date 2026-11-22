@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@color/lumiAccentBlue,@color/lumiAccentPurple,@color/settingsNav,@dimen/glass_elevation_3,@drawable/ic_launcher_spark,@drawable/ic_launcher_spark_mono,@drawable/ic_onboarding_logo" />
