@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.doOnLayout
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.GridLayoutManager
@@ -1434,7 +1435,7 @@ class DrawerController(
             textSize = 12f
             setPadding(0, dp(3), dp(12), 0)
         })
-        val smart = android.widget.Switch(context).apply {
+        val smart = SwitchCompat(context).apply {
             isChecked = prefs.smartFolders
             contentDescription = context.getString(R.string.smart_groups)
         }
@@ -1530,7 +1531,7 @@ class DrawerController(
             groups.sortedBy { it.order }.forEach { group ->
                 val count = viewModel.appsInGroup(group).size
                 content.addView(TextView(context).apply {
-                    text = "${group.name}  ·  $count"
+                    text = context.getString(R.string.drawer_group_name_count, group.name, count)
                     textSize = 16f
                     setTextColor(0xFFF2F3F7.toInt())
                     setPadding(0, (8 * density).toInt(), 0, (8 * density).toInt())
