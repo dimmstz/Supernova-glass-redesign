@@ -44,6 +44,15 @@ object DefaultLayoutBuilder {
     // The resolver activity, handed back when the user has no default for an
     // intent and Android would show the chooser. Not a real app.
     private const val RESOLVER_PACKAGE = "android"
+    private const val BUILT_IN_MIN_GRID_COLS = 4
+    private const val BUILT_IN_MIN_GRID_ROWS = 4
+    private const val BUILT_IN_START_X = 0
+    private const val WEATHER_START_Y = 0
+    private const val WEATHER_SPAN_X = 4
+    private const val WEATHER_SPAN_Y = 2
+    private const val SYSTEM_START_Y = 2
+    private const val SYSTEM_SPAN_X = 4
+    private const val SYSTEM_SPAN_Y = 1
 
     // Where a place's app can come from: one of a recipe's <favorite>s.
     internal sealed interface Source {
@@ -153,7 +162,7 @@ object DefaultLayoutBuilder {
         // The first-run layout has clear rows above the app row. Keep
         // these built-in widgets as ordinary hostable items so users can move,
         // resize, remove or restore them exactly like any Android widget.
-        if (cols >= 4 && rows >= 4) {
+        if (cols >= BUILT_IN_MIN_GRID_COLS && rows >= BUILT_IN_MIN_GRID_ROWS) {
             data class BuiltIn(
                 val x: Int,
                 val y: Int,
@@ -163,8 +172,8 @@ object DefaultLayoutBuilder {
                 val label: Int
             )
             val builtIns = listOf(
-                BuiltIn(0, 0, 4, 2, WeatherClockWidgetProvider::class.java, R.string.widget_weather_title),
-                BuiltIn(0, 2, 4, 1, LumiSystemInfoWidgetProvider::class.java, R.string.widget_system_title)
+                BuiltIn(BUILT_IN_START_X, WEATHER_START_Y, WEATHER_SPAN_X, WEATHER_SPAN_Y, WeatherClockWidgetProvider::class.java, R.string.widget_weather_title),
+                BuiltIn(BUILT_IN_START_X, SYSTEM_START_Y, SYSTEM_SPAN_X, SYSTEM_SPAN_Y, LumiSystemInfoWidgetProvider::class.java, R.string.widget_system_title)
             )
             return appItems + builtIns.filter { it.x + it.spanX <= cols && it.y + it.spanY <= rows }.map { item ->
                 LauncherItem(
