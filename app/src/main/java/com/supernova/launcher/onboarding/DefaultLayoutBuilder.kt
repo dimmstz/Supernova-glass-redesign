@@ -104,6 +104,7 @@ object DefaultLayoutBuilder {
         listOf(EMAIL, CALENDAR, GALLERY, MARKET, BROWSER, CAMERA).map { Slot(null, it) }
     } else {
         listOf(DIALER, MESSAGES, MAPS, BROWSER, CAMERA).map { Slot(null, it) } + listOf(
+            Slot(-1 to 0, listOf(Source.Self)),
             Slot(0 to -1, EMAIL),
             Slot(1 to -1, GALLERY),
             Slot(-1 to -1, MARKET)
@@ -118,7 +119,7 @@ object DefaultLayoutBuilder {
         fun resolve(source: Source): String? = launchable(
             when (source) {
                 Source.DefaultSms -> runCatching { Telephony.Sms.getDefaultSmsPackage(context) }.getOrNull()
-                Source.Self -> null
+                Source.Self -> context.packageName
                 is Source.Category -> resolvePackage(pm, Intent(Intent.ACTION_MAIN).addCategory(source.category))
                 is Source.Action -> resolvePackage(
                     pm,
